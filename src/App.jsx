@@ -8,8 +8,11 @@ import CustomModal from "./components/content/modal/Modal";
 import RewardPopup from "./components/content/modal/RewardPopup";
 import RankingModal from "./components/content/modal/RankingModal";
 import rankingData from './assets/rankingData.json';
-import {ToastContainer} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import axios from "axios";
+import {API_SERVER} from "./client/RequestQueryClient.js";
+import {getSession} from "./store/SessionStore.js";
 
 const queryClient = new QueryClient()
 
@@ -19,8 +22,11 @@ function AppContent() {
   const [isRankingModalOpen, setIsRankingModalOpen] = useState(false);
   const [rewardInfo, setRewardInfo] = useState({ title: '', subTitle: '' });
   const [userRank, setUserRank] = useState(7); // 예시로 사용자 랭킹을 7로 설정
+  const [asset, setAsset] = useState(1000000);
 
   useEffect(() => {
+
+
     const handleKeyPress = (event) => {
       if (event.key === 'q') {
         handleOpenRewardPopup("숨겨진 캐릭터 발견!!", "q 캐릭터 획득!!");
@@ -49,6 +55,8 @@ function AppContent() {
     setIsModalOpen(false);
     handleOpenRewardPopup("투자 성공!", `${investmentInfo.amount}원을 투자했습니다.`);
   };
+
+
 
   return (
     <>

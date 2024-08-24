@@ -20,14 +20,23 @@ import InvestmentResultDisplay from "./InvestmentResultDisplay";
 
 import financialTerms from "../../../assets/financialTerms.json";
 import financialCrisisScenarios from "../../../assets/financialCrisisScenarios.json";
+
 import { processApiResponse } from "./utils"; // 위에서 만든 함수를 import
 import axios from "axios";
+
 import { API_SERVER } from "../../../client/RequestQueryClient.js";
+
+import {getSession} from "../../../store/SessionStore.js";
+
+import {toast} from "react-toastify";
+
 
 const api = axios.create({
   baseURL: API_SERVER ,
   withCredentials: false, // 필요한 경우 (쿠키를 포함해야 하는 경우)
 });
+
+
 
 // 자연 테마 정의
 const natureTheme = createTheme({
@@ -100,6 +109,7 @@ const CustomModal = ({
     fetchScenarioData();
   }, []);
 
+
   const closeModal = () => {
     setIsModalOpen(false);
     setCurrentPage(1);
@@ -132,12 +142,22 @@ const CustomModal = ({
     
     const scenarioContent = scenarioData[currentScenario].content;
     const parsedScenario = parseScenario(scenarioContent);
-    
+
+      const sessionId = JSON.parse(getSession()).id;
+      axios
+          .get(`${API_SERVER}/api/asset/${sessionId}`)
+          .then((response) => {
+              setMoney(response.data);
+          })
+          .catch((error) => {
+              toast(error);
+              return 1000000;
+          });
     if (direction === "next") {
       if (currentStoryPage < parsedScenario.length - 1) {
         setCurrentStoryPage(currentStoryPage + 1);
       } else {
-        handlePageChange(3);
+          handlePageChange(3);
       }
     } else if (direction === "prev") {
       if (currentStoryPage > 0) {
@@ -157,6 +177,12 @@ const CustomModal = ({
     setInvestmentPercentage(newValue);
   };
 
+  const clientMoneyResult = function(resultAmount) {
+      const session = JSON.parse(getSession()).id;
+      axios.put(`${API_SERVER}/api/asset/${session}`, resultAmount)
+          .then(res => res.json);
+  }
+
   const handleInvestmentDecision = () => {
     const investedAmount = Math.round((money * investmentPercentage) / 100);
     if (selectedInvestment === "부동산" && investedAmount < 100000) {
@@ -175,8 +201,10 @@ const CustomModal = ({
         returnRate
       });
 
+      clientMoneyResult(investedAmount);
       setMoney(money - investedAmount + resultAmount);
-      
+
+
       if (selectedInvestment === "부동산" && investedAmount >= 300000) {
         setPlayerCompletedQuests(prev => {
           if (!prev.includes("houseInvestment")) {
@@ -185,7 +213,7 @@ const CustomModal = ({
           return prev;
         });
       }
-      
+
       handlePageChange(5);
     }
   };
@@ -471,42 +499,36 @@ const CustomModal = ({
             </Grid>
           </>
         );
-      case 5:
-        return (
-          <>
-            <Box
-              flexGrow={1}
-              display="flex"
-              flexDirection="column"
-              justifyContent="center"
-              mb={2}
-            >
-              <InvestmentResultDisplay
-                investmentResult={investmentResult}
-                investmentPercentage={investmentPercentage}
-              />
-            </Box>
-            <Button
-              variant="contained"
-              onClick={closeModal}
-              sx={{
-                fontSize: "18px",
-                padding: "10px 20px",
-                backgroundColor: natureTheme.palette.primary.main,
-                color: natureTheme.palette.background.paper,
-                "&:hover": {
-                  backgroundColor: natureTheme.palette.primary.dark,
-                },
-              }}
-            >
-              닫기
-            </Button>
-          </>
-        );
-      default:
-        return null;
-    }
-  };
+        case 5:
+          return (
+            <>
+              <Box flexGrow={1} display="flex" flexDirection="column" justifyContent="center" mb={2}>
+                <InvestmentResultDisplay
+                  investmentResult={investmentResult}
+                  investmentPercentage={investmentPercentage}
+                />
+              </Box>
+              <Button
+                variant="contained"
+                onClick={closeModal}
+                sx={{
+                  fontSize: "18px",
+                  padding: "10px 20px",
+                  backgroundColor: natureTheme.palette.primary.main,
+                  color: natureTheme.palette.background.paper,
+                  "&:hover": {
+                    backgroundColor: natureTheme.palette.primary.dark,
+                  },
+                }}
+              >
+                닫기
+              </Button>
+            </>
+          );
+        default:
+          return null;
+      }
+    };
 
   return (
     <ThemeProvider theme={natureTheme}>

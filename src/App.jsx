@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { RecoilRoot, useRecoilState } from "recoil";
 import { IsModalOpenAtom } from "./store/ModalAtom"; // Recoil atom import 추가
 import "./App.css";
@@ -6,23 +6,26 @@ import { ClientSocketControls } from "./components/utilComponents/ClientSocketCo
 import { Content } from "./components/content/Content";
 import CustomModal from "./components/content/modal/Modal";
 import RewardPopup from "./components/content/modal/RewardPopup";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ToastContainer } from "react-toastify";
+
+const queryClient = new QueryClient();
 
 function AppContent() {
   const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenAtom);
   const [isRewardPopupOpen, setIsRewardPopupOpen] = useState(false);
-  const [rewardInfo, setRewardInfo] = useState({ title: '', subTitle: '' });
-
+  const [rewardInfo, setRewardInfo] = useState({ title: "", subTitle: "" });
   useEffect(() => {
     const handleKeyPress = (event) => {
-      if (event.key === 'q') {
+      if (event.key === "q") {
         handleOpenRewardPopup("숨겨진 캐릭터 발견!!", "q 캐릭터 획득!!");
       }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener("keydown", handleKeyPress);
     };
   }, []);
 
@@ -37,13 +40,28 @@ function AppContent() {
 
   const handleInvestmentDecision = (investmentInfo) => {
     setIsModalOpen(false);
-    handleOpenRewardPopup("투자 성공!", `${investmentInfo.amount}원을 투자했습니다.`);
+    handleOpenRewardPopup(
+      "투자 성공!",
+      `${investmentInfo.amount}원을 투자했습니다.`
+    );
   };
 
   return (
     <>
       <Content />
       <ClientSocketControls />
+
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
 
       <CustomModal
         title="경제 위기 모험!"
@@ -68,9 +86,11 @@ function AppContent() {
 
 function App() {
   return (
-    <RecoilRoot>
-      <AppContent />
-    </RecoilRoot>
+    <QueryClientProvider client={queryClient}>
+      <RecoilRoot>
+        <AppContent />
+      </RecoilRoot>
+    </QueryClientProvider>
   );
 }
 

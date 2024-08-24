@@ -19,28 +19,7 @@ export const Swing = () => {
       mesh.receiveShadow = true;
     });
     const mesh = scene.children[0];
-    if (mesh?.geometry.boundingBox) {
-      setPlayGroundStructuresBoundingBox((prev) =>
-        _.uniqBy(
-          [
-            ...prev,
-            {
-              name,
-              box: {
-                max: mesh.geometry.boundingBox.max
-                  .clone()
-                  .multiplyScalar(scale * 1.4),
-                min: mesh.geometry.boundingBox.min
-                  .clone()
-                  .multiplyScalar(scale * 1.4),
-              },
-              position,
-            },
-          ],
-          "name"
-        )
-      );
-    }
+
   }, [position, scene, setPlayGroundStructuresBoundingBox]);
 
   return (

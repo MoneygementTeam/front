@@ -32,10 +32,10 @@ export const Lobby = () => {
     <LoginContainer>
       {currentStep === STEPS.NICK_NAME && (
         <>
-          <LoginTitle>게임내에서 사용할 내 이름이예요.</LoginTitle>
+          <LoginTitle>아이디를 입력해주세요</LoginTitle>
           <Input
             autoFocus
-            placeholder="이름을 입력해주세요."
+            placeholder="아이디를 입력해주세요."
             onChange={(e) => setTempNickname(e.target.value)}
             onKeyUp={(e) => {
               if (!isValidText(tempNickName)) return;
@@ -58,10 +58,10 @@ export const Lobby = () => {
       {currentStep === STEPS.JOB_POSITION && (
         <>
           <>
-            <LoginTitle>비밀번호를 입력해주세요</LoginTitle>
+            <LoginTitle>게임내에서 사용할 내 이름이예요</LoginTitle>
             <Input
               autoFocus
-              placeholder="비밀번호를 입력해주세요"
+              placeholder="이름을 입력해주세요"
               onChange={(e) => setTempJobPosition(e.target.value)}
               onKeyUp={(e) => {
                 if (!isValidText(tempJobPosition)) return;

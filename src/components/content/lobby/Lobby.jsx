@@ -3,12 +3,17 @@ import { STEPS } from "../../../data/constants";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import {
   CharacterSelectFinishedAtom,
+  ErrorToastAtom,
   SelectedCharacterGlbNameIndexAtom,
 } from "../../../store/PlayersAtom";
 import { isValidText } from "../../../utils";
 import styled from "styled-components";
 import { MainCanvas } from "../canvas/MainCanvas";
 import { socket } from "../../../sockets/clientSocket";
+import { API_SERVER } from "../../../client/RequestQueryClient.js";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { setSession } from "../../../store/SessionStore.js";
 
 export const Lobby = () => {
   const [currentStep, setCurrentStep] = useState(STEPS.NICK_NAME);
@@ -19,6 +24,8 @@ export const Lobby = () => {
   const setCharacterSelectFinished = useSetRecoilState(
     CharacterSelectFinishedAtom
   );
+  const [isErrorToastOpen, setIsErrorToastOpen] =
+    useRecoilState(ErrorToastAtom);
 
   if (!socket) return null;
   return (
@@ -66,7 +73,7 @@ export const Lobby = () => {
             <NextBtn
               disabled={!isValidText(tempJobPosition)}
               className={isValidText(tempJobPosition) ? "valid" : "disabled"}
-              onClick={() => {
+              onClick={async () => {
                 setCurrentStep((prev) => prev + 1);
               }}
             >
@@ -85,7 +92,7 @@ export const Lobby = () => {
       )}
       {currentStep === STEPS.CHARACTER && (
         <>
-          <LoginTitle>페디에서 사용할 내 아바타를 고를시간이에요</LoginTitle>
+          <LoginTitle>게임내에서 사용할 내 아바타를 고를시간이에요</LoginTitle>
           <CharacterCanvasContainer>
             <CharacterTunningWrapper>
               <CharacterCanvasWrapper>
@@ -97,8 +104,24 @@ export const Lobby = () => {
               className={
                 !tempNickName || !tempJobPosition ? "disabled" : "valid"
               }
-              onClick={() => {
+              onClick={async () => {
                 if (!tempNickName || !tempJobPosition) return;
+
+                const res = await axios
+                  .post(`${API_SERVER}/api/user/signin`, {
+                    userId: tempNickName,
+                    userPw: tempJobPosition,
+                  })
+                  .then((response) => response.data)
+                  .catch((error) => {
+                    toast(error);
+                    return;
+                  });
+                if (!res) {
+                  toast("Internal Server Error");
+                  return;
+                }
+                setSession({ id: res });
 
                 socket.emit("initialize", {
                   tempNickName,
@@ -106,6 +129,7 @@ export const Lobby = () => {
                   selectedCharacterGlbNameIndex,
                   myRoom: { object: [] },
                 });
+
                 setCharacterSelectFinished(true);
               }}
               onKeyUp={(e) => {

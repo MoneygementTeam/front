@@ -6,6 +6,11 @@ export const PlayersAtom = atom({
   default: [],
 });
 
+export const ErrorToastAtom = atom({
+  key: "ErrorToastAtom",
+  default: false,
+});
+
 // 내 socket 정보
 export const MeAtom = atom({
   key: "MeAtom",

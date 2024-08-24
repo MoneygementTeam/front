@@ -8,6 +8,10 @@ import CustomModal from "./components/content/modal/Modal";
 import RewardPopup from "./components/content/modal/RewardPopup";
 import RankingModal from "./components/content/modal/RankingModal";
 import rankingData from './assets/rankingData.json';
+import {ToastContainer} from "react-toastify";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+
+const queryClient = new QueryClient()
 
 function AppContent() {
   const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenAtom);
@@ -51,6 +55,18 @@ function AppContent() {
       <Content />
       <ClientSocketControls />
 
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+
       <CustomModal
         title="경제 위기 모험!"
         page={1}
@@ -81,9 +97,11 @@ function AppContent() {
 
 function App() {
   return (
-    <RecoilRoot>
-      <AppContent />
-    </RecoilRoot>
+    <QueryClientProvider client={queryClient}>
+      <RecoilRoot>
+        <AppContent />
+      </RecoilRoot>
+    </QueryClientProvider>
   );
 }
 

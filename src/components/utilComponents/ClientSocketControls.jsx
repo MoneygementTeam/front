@@ -2,10 +2,12 @@ import { useEffect } from "react";
 import { socket } from "../../sockets/clientSocket";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { MeAtom, PlayersAtom } from "../../store/PlayersAtom";
+import { getSession, setSession } from "../../store/SessionStore";
 
 export const ClientSocketControls = () => {
   const setPlayers = useSetRecoilState(PlayersAtom);
   const [me, setMe] = useRecoilState(MeAtom);
+
   useEffect(() => {
     const handleConnect = () => {
       console.info("연결됨");

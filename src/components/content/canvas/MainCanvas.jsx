@@ -4,7 +4,7 @@ import { OrbitControls } from "@react-three/drei";
 import { RootMap } from "./maps/RootMap";
 
 export const MainCanvas = () => {
-  const aspectRatio = window.innerWidth / window.innerHeight;
+  const aspectRatio = window.outerWidth / window.outerHeight;
   return (
     <Canvas
       id="canvas"

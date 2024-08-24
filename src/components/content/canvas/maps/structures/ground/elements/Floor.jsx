@@ -5,7 +5,7 @@ import { groundMapSize } from "../../../../../../../data/constants";
 import { socket } from "../../../../../../../sockets/clientSocket";
 
 export const Floor = () => {
-  const sandTexture = useLoader(TextureLoader, "/sand.jpg");
+  const sandTexture = useLoader(TextureLoader, "/grass.jpg");
   sandTexture.wrapS = RepeatWrapping;
   sandTexture.wrapT = RepeatWrapping;
   sandTexture.repeat.x = 5;

@@ -16,14 +16,27 @@ import { IsModalOpenAtom } from "../../../store/ModalAtom";
 import { PlayerCompletedQuestsAtom } from "../../../store/PlayersAtom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Grow } from "@mui/material";
-import InvestmentResultDisplay from './InvestmentResultDisplay';
+import InvestmentResultDisplay from "./InvestmentResultDisplay";
 
 import financialTerms from "../../../assets/financialTerms.json";
 import financialCrisisScenarios from "../../../assets/financialCrisisScenarios.json";
-import {API_SERVER} from "../../../client/RequestQueryClient.js";
-import {getSession} from "../../../store/SessionStore.js";
+
+import { processApiResponse } from "./utils"; // 위에서 만든 함수를 import
 import axios from "axios";
+
+import { API_SERVER } from "../../../client/RequestQueryClient.js";
+
+import {getSession} from "../../../store/SessionStore.js";
+
 import {toast} from "react-toastify";
+
+
+const api = axios.create({
+  baseURL: API_SERVER ,
+  withCredentials: false, // 필요한 경우 (쿠키를 포함해야 하는 경우)
+});
+
+
 
 // 자연 테마 정의
 const natureTheme = createTheme({
@@ -63,7 +76,9 @@ const CustomModal = ({
   onInvestmentDecision,
 }) => {
   const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenAtom);
-  const [playerCompletedQuests, setPlayerCompletedQuests] = useRecoilState(PlayerCompletedQuestsAtom);
+  const [playerCompletedQuests, setPlayerCompletedQuests] = useRecoilState(
+    PlayerCompletedQuestsAtom
+  );
   const [currentPage, setCurrentPage] = useState(page);
   const [currentScenario, setCurrentScenario] = useState(null);
   const [currentStoryPage, setCurrentStoryPage] = useState(0);
@@ -75,6 +90,24 @@ const CustomModal = ({
   const [isTermPopupOpen, setIsTermPopupOpen] = useState(false);
   const [currentTerm, setCurrentTerm] = useState("");
   const [investmentResult, setInvestmentResult] = useState(null);
+  const [scenarioData, setScenarioData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchScenarioData = async () => {
+      try {
+        const response = await api.get('/api/theme/');
+        const processedData = processApiResponse(response.data);
+        setScenarioData(processedData);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching scenario data:', error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchScenarioData();
+  }, []);
 
 
   const closeModal = () => {
@@ -105,7 +138,9 @@ const CustomModal = ({
   };
 
   const handleStoryNavigation = (direction) => {
-    const scenarioContent = financialCrisisScenarios[currentScenario].content;
+    if (!scenarioData[currentScenario]) return;
+    
+    const scenarioContent = scenarioData[currentScenario].content;
     const parsedScenario = parseScenario(scenarioContent);
 
       const sessionId = JSON.parse(getSession()).id;
@@ -154,7 +189,8 @@ const CustomModal = ({
       setAlertMessage("최소 금액이 100000원 입니다!");
       setIsAlertOpen(true);
     } else {
-      const returnRate = parseFloat(financialCrisisScenarios[currentScenario].투자수익률[selectedInvestment].replace('%', '')) / 100;
+      const returnRateString = scenarioData[currentScenario].투자수익률[selectedInvestment];
+      const returnRate = parseFloat(returnRateString.replace('%', '')) / 100;
       const resultAmount = Math.round(investedAmount * (1 + returnRate));
       const profit = resultAmount - investedAmount;
 
@@ -230,94 +266,97 @@ const CustomModal = ({
   };
 
   const renderPageContent = () => {
-    switch (currentPage) {
-      // renderPageContent 함수의 case 1 부분 수정
-case 1:
-  return (
-    <Grid container spacing={2}>
-      {Object.keys(financialCrisisScenarios).map((scenario, index) => (
-        <Grid item xs={6} key={index}>
-          <Button
-            variant="contained"
-            fullWidth
-            onClick={() => handleScenarioSelect(scenario)}
-            sx={{
-              fontSize: "18px",
-              padding: "15px",
-              height: "100px",
-              whiteSpace: "normal",
-              lineHeight: 1.2,
-              backgroundColor: natureTheme.palette.secondary.main,
-              color: natureTheme.palette.background.paper,
-              "&:hover": {
-                backgroundColor: natureTheme.palette.secondary.dark,
-              },
-            }}
-          >
-            {financialCrisisScenarios[scenario].title}
-          </Button>
-        </Grid>
-      ))}
-    </Grid>
-  );
+    if (isLoading) {
+      return <div>Loading...</div>;
+    }
 
-// renderPageContent 함수의 case 2 부분 수정
-case 2:
-  const scenarioContent = financialCrisisScenarios[currentScenario].content;
-  const parsedScenario = parseScenario(scenarioContent);
-  return (
-    <>
-      <Box flexGrow={1} overflow="auto" mb={2}>
-        <Typography
-          variant="body1"
-          sx={{
-            fontSize: "18pt",
-            color: natureTheme.palette.text.primary,
-          }}
-        >
-          {highlightFinancialTerms(parsedScenario[currentStoryPage])}
-        </Typography>
-      </Box>
-      <Grid container spacing={2} justifyContent="space-between">
-        <Grid item>
-          <Button
-            variant="contained"
-            onClick={() => handleStoryNavigation("prev")}
-            sx={{
-              fontSize: "18px",
-              padding: "10px 20px",
-              backgroundColor: natureTheme.palette.secondary.main,
-              color: natureTheme.palette.background.paper,
-              "&:hover": {
-                backgroundColor: natureTheme.palette.secondary.dark,
-              },
-            }}
-          >
-            이전
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            variant="contained"
-            onClick={() => handleStoryNavigation("next")}
-            sx={{
-              fontSize: "18px",
-              padding: "10px 20px",
-              backgroundColor: natureTheme.palette.secondary.main,
-              color: natureTheme.palette.background.paper,
-              "&:hover": {
-                backgroundColor: natureTheme.palette.secondary.dark,
-              },
-            }}
-          >
-            {currentStoryPage === parsedScenario.length - 1
-              ? "투자 선택"
-              : "다음"}
-          </Button>
-        </Grid>
-      </Grid>
-    </>
-  );
+    switch (currentPage) {
+      case 1:
+        return (
+          <Grid container spacing={2}>
+            {Object.entries(scenarioData).map(([key, scenario], index) => (
+              <Grid item xs={6} key={index}>
+                <Button
+                  variant="contained"
+                  fullWidth
+                  onClick={() => handleScenarioSelect(key)}
+                  sx={{
+                    fontSize: "18px",
+                    padding: "15px",
+                    height: "100px",
+                    whiteSpace: "normal",
+                    lineHeight: 1.2,
+                    backgroundColor: natureTheme.palette.secondary.main,
+                    color: natureTheme.palette.background.paper,
+                    "&:hover": {
+                      backgroundColor: natureTheme.palette.secondary.dark,
+                    },
+                  }}
+                >
+                  {scenario.title}
+                </Button>
+              </Grid>
+            ))}
+          </Grid>
+        );
+
+      case 2:
+        if (!scenarioData[currentScenario]) return null;
+        const scenarioContent = scenarioData[currentScenario].content;
+        const parsedScenario = parseScenario(scenarioContent);
+        return (
+          <>
+            <Box flexGrow={1} overflow="auto" mb={2}>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontSize: "18pt",
+                  color: natureTheme.palette.text.primary,
+                }}
+              >
+                {highlightFinancialTerms(parsedScenario[currentStoryPage])}
+              </Typography>
+            </Box>
+            <Grid container spacing={2} justifyContent="space-between">
+              <Grid item>
+                <Button
+                  variant="contained"
+                  onClick={() => handleStoryNavigation("prev")}
+                  sx={{
+                    fontSize: "18px",
+                    padding: "10px 20px",
+                    backgroundColor: natureTheme.palette.secondary.main,
+                    color: natureTheme.palette.background.paper,
+                    "&:hover": {
+                      backgroundColor: natureTheme.palette.secondary.dark,
+                    },
+                  }}
+                >
+                  이전
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  onClick={() => handleStoryNavigation("next")}
+                  sx={{
+                    fontSize: "18px",
+                    padding: "10px 20px",
+                    backgroundColor: natureTheme.palette.secondary.main,
+                    color: natureTheme.palette.background.paper,
+                    "&:hover": {
+                      backgroundColor: natureTheme.palette.secondary.dark,
+                    },
+                  }}
+                >
+                  {currentStoryPage === parsedScenario.length - 1
+                    ? "투자 선택"
+                    : "다음"}
+                </Button>
+              </Grid>
+            </Grid>
+          </>
+        );
       case 3:
         return (
           <>

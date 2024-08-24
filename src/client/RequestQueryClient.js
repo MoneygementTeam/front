@@ -1,1 +1,1 @@
-export const API_SERVER = "https://moneygement.o-r.kr";
+export const API_SERVER = "https://moneygement.o-r.kr/";

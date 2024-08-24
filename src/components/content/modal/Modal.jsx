@@ -16,6 +16,7 @@ import { IsModalOpenAtom } from "../../../store/ModalAtom";
 import { PlayerCompletedQuestsAtom } from "../../../store/PlayersAtom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Grow } from "@mui/material";
+import InvestmentResultDisplay from './InvestmentResultDisplay';
 
 import financialTerms from "../../../assets/financialTerms.json";
 import financialCrisisScenarios from "../../../assets/financialCrisisScenarios.json";
@@ -55,6 +56,7 @@ const CustomModal = ({
   page,
   investmentOptions,
   Money: initialMoney,
+  onInvestmentDecision,
 }) => {
   const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenAtom);
   const [playerCompletedQuests, setPlayerCompletedQuests] = useRecoilState(PlayerCompletedQuestsAtom);
@@ -68,10 +70,18 @@ const CustomModal = ({
   const [alertMessage, setAlertMessage] = useState("");
   const [isTermPopupOpen, setIsTermPopupOpen] = useState(false);
   const [currentTerm, setCurrentTerm] = useState("");
+  const [investmentResult, setInvestmentResult] = useState(null);
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setCurrentPage(1);
+    setCurrentScenario(null);
+    setCurrentStoryPage(0);
+    setSelectedInvestment(null);
+    setInvestmentPercentage(0);
+    setInvestmentResult(null);
   };
+
   //setIsModalOpen(true);
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
@@ -90,9 +100,9 @@ const CustomModal = ({
   };
 
   const handleStoryNavigation = (direction) => {
-    const parsedScenario = parseScenario(
-      financialCrisisScenarios[currentScenario]
-    );
+    const scenarioContent = financialCrisisScenarios[currentScenario].content;
+    const parsedScenario = parseScenario(scenarioContent);
+    
     if (direction === "next") {
       if (currentStoryPage < parsedScenario.length - 1) {
         setCurrentStoryPage(currentStoryPage + 1);
@@ -123,7 +133,19 @@ const CustomModal = ({
       setAlertMessage("최소 금액이 100000원 입니다!");
       setIsAlertOpen(true);
     } else {
-      setMoney(money - investedAmount);
+      const returnRate = parseFloat(financialCrisisScenarios[currentScenario].투자수익률[selectedInvestment].replace('%', '')) / 100;
+      const resultAmount = Math.round(investedAmount * (1 + returnRate));
+      const profit = resultAmount - investedAmount;
+  
+      setInvestmentResult({
+        investedAmount,
+        resultAmount,
+        profit,
+        returnRate
+      });
+  
+      setMoney(money - investedAmount + resultAmount);
+      
       if (selectedInvestment === "부동산" && investedAmount >= 300000) {
         setPlayerCompletedQuests(prev => {
           if (!prev.includes("houseInvestment")) {
@@ -132,7 +154,8 @@ const CustomModal = ({
           return prev;
         });
       }
-      closeModal();
+      
+      handlePageChange(5);
     }
   };
 
@@ -176,6 +199,8 @@ const CustomModal = ({
         return "투자 종목 선택";
       case 4:
         return `${selectedInvestment} 투자`;
+      case 5:
+        return "투자 결과";
       default:
         return title;
     }
@@ -183,91 +208,93 @@ const CustomModal = ({
 
   const renderPageContent = () => {
     switch (currentPage) {
-      case 1:
-        return (
-          <Grid container spacing={2}>
-            {Object.keys(financialCrisisScenarios).map((scenario, index) => (
-              <Grid item xs={6} key={index}>
-                <Button
-                  variant="contained"
-                  fullWidth
-                  onClick={() => handleScenarioSelect(scenario)}
-                  sx={{
-                    fontSize: "18px",
-                    padding: "15px",
-                    height: "100px",
-                    whiteSpace: "normal",
-                    lineHeight: 1.2,
-                    backgroundColor: natureTheme.palette.secondary.main,
-                    color: natureTheme.palette.background.paper,
-                    "&:hover": {
-                      backgroundColor: natureTheme.palette.secondary.dark,
-                    },
-                  }}
-                >
-                  {scenario}
-                </Button>
-              </Grid>
-            ))}
-          </Grid>
-        );
-      case 2:
-        const parsedScenario = parseScenario(
-          financialCrisisScenarios[currentScenario]
-        );
-        return (
-          <>
-            <Box flexGrow={1} overflow="auto" mb={2}>
-              <Typography
-                variant="body1"
-                sx={{
-                  fontSize: "18pt",
-                  color: natureTheme.palette.text.primary,
-                }}
-              >
-                {highlightFinancialTerms(parsedScenario[currentStoryPage])}
-              </Typography>
-            </Box>
-            <Grid container spacing={2} justifyContent="space-between">
-              <Grid item>
-                <Button
-                  variant="contained"
-                  onClick={() => handleStoryNavigation("prev")}
-                  sx={{
-                    fontSize: "18px",
-                    padding: "10px 20px",
-                    backgroundColor: natureTheme.palette.secondary.main,
-                    color: natureTheme.palette.background.paper,
-                    "&:hover": {
-                      backgroundColor: natureTheme.palette.secondary.dark,
-                    },
-                  }}
-                >
-                  이전
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button
-                  variant="contained"
-                  onClick={() => handleStoryNavigation("next")}
-                  sx={{
-                    fontSize: "18px",
-                    padding: "10px 20px",
-                    backgroundColor: natureTheme.palette.secondary.main,
-                    color: natureTheme.palette.background.paper,
-                    "&:hover": {
-                      backgroundColor: natureTheme.palette.secondary.dark,
-                    },
-                  }}
-                >
-                  {currentStoryPage === parsedScenario.length - 1
-                    ? "투자 선택"
-                    : "다음"}
-                </Button>
-              </Grid>
-            </Grid>
-          </>
-        );
+      // renderPageContent 함수의 case 1 부분 수정
+case 1:
+  return (
+    <Grid container spacing={2}>
+      {Object.keys(financialCrisisScenarios).map((scenario, index) => (
+        <Grid item xs={6} key={index}>
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={() => handleScenarioSelect(scenario)}
+            sx={{
+              fontSize: "18px",
+              padding: "15px",
+              height: "100px",
+              whiteSpace: "normal",
+              lineHeight: 1.2,
+              backgroundColor: natureTheme.palette.secondary.main,
+              color: natureTheme.palette.background.paper,
+              "&:hover": {
+                backgroundColor: natureTheme.palette.secondary.dark,
+              },
+            }}
+          >
+            {financialCrisisScenarios[scenario].title}
+          </Button>
+        </Grid>
+      ))}
+    </Grid>
+  );
+
+// renderPageContent 함수의 case 2 부분 수정
+case 2:
+  const scenarioContent = financialCrisisScenarios[currentScenario].content;
+  const parsedScenario = parseScenario(scenarioContent);
+  return (
+    <>
+      <Box flexGrow={1} overflow="auto" mb={2}>
+        <Typography
+          variant="body1"
+          sx={{
+            fontSize: "18pt",
+            color: natureTheme.palette.text.primary,
+          }}
+        >
+          {highlightFinancialTerms(parsedScenario[currentStoryPage])}
+        </Typography>
+      </Box>
+      <Grid container spacing={2} justifyContent="space-between">
+        <Grid item>
+          <Button
+            variant="contained"
+            onClick={() => handleStoryNavigation("prev")}
+            sx={{
+              fontSize: "18px",
+              padding: "10px 20px",
+              backgroundColor: natureTheme.palette.secondary.main,
+              color: natureTheme.palette.background.paper,
+              "&:hover": {
+                backgroundColor: natureTheme.palette.secondary.dark,
+              },
+            }}
+          >
+            이전
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            onClick={() => handleStoryNavigation("next")}
+            sx={{
+              fontSize: "18px",
+              padding: "10px 20px",
+              backgroundColor: natureTheme.palette.secondary.main,
+              color: natureTheme.palette.background.paper,
+              "&:hover": {
+                backgroundColor: natureTheme.palette.secondary.dark,
+              },
+            }}
+          >
+            {currentStoryPage === parsedScenario.length - 1
+              ? "투자 선택"
+              : "다음"}
+          </Button>
+        </Grid>
+      </Grid>
+    </>
+  );
       case 3:
         return (
           <>
@@ -410,10 +437,36 @@ const CustomModal = ({
             </Grid>
           </>
         );
-      default:
-        return null;
-    }
-  };
+        case 5:
+          return (
+            <>
+              <Box flexGrow={1} display="flex" flexDirection="column" justifyContent="center" mb={2}>
+                <InvestmentResultDisplay 
+                  investmentResult={investmentResult}
+                  investmentPercentage={investmentPercentage}
+                />
+              </Box>
+              <Button
+                variant="contained"
+                onClick={closeModal}
+                sx={{
+                  fontSize: "18px",
+                  padding: "10px 20px",
+                  backgroundColor: natureTheme.palette.primary.main,
+                  color: natureTheme.palette.background.paper,
+                  "&:hover": {
+                    backgroundColor: natureTheme.palette.primary.dark,
+                  },
+                }}
+              >
+                닫기
+              </Button>
+            </>
+          );
+        default:
+          return null;
+      }
+    };
 
   return (
     <ThemeProvider theme={natureTheme}>
@@ -439,7 +492,7 @@ const CustomModal = ({
               flexDirection: "column",
               overflow: "hidden",
               bgcolor: "background.paper",
-              borderRadius: "16px",
+              borderRadius: "40px",
               boxShadow: 24,
               // transform 속성 제거
             }}

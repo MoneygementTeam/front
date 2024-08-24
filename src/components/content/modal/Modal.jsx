@@ -13,6 +13,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useRecoilState } from "recoil";
 import { IsModalOpenAtom } from "../../../store/ModalAtom";
+import { PlayerCompletedQuestsAtom } from "../../../store/PlayersAtom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Grow } from "@mui/material";
 
@@ -56,6 +57,7 @@ const CustomModal = ({
   Money: initialMoney,
 }) => {
   const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenAtom);
+  const [playerCompletedQuests, setPlayerCompletedQuests] = useRecoilState(PlayerCompletedQuestsAtom);
   const [currentPage, setCurrentPage] = useState(page);
   const [currentScenario, setCurrentScenario] = useState(null);
   const [currentStoryPage, setCurrentStoryPage] = useState(0);
@@ -122,6 +124,14 @@ const CustomModal = ({
       setIsAlertOpen(true);
     } else {
       setMoney(money - investedAmount);
+      if (selectedInvestment === "부동산" && investedAmount >= 300000) {
+        setPlayerCompletedQuests(prev => {
+          if (!prev.includes("houseInvestment")) {
+            return [...prev, "houseInvestment"];
+          }
+          return prev;
+        });
+      }
       closeModal();
     }
   };

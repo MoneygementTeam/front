@@ -1,31 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import { RecoilRoot, useRecoilState } from "recoil";
-import { IsModalOpenAtom } from "./store/ModalAtom"; // Recoil atom import 추가
+import { IsModalOpenAtom } from "./store/ModalAtom";
 import "./App.css";
 import { ClientSocketControls } from "./components/utilComponents/ClientSocketControls";
 import { Content } from "./components/content/Content";
 import CustomModal from "./components/content/modal/Modal";
 import RewardPopup from "./components/content/modal/RewardPopup";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ToastContainer } from "react-toastify";
+import RankingModal from "./components/content/modal/RankingModal";
+import rankingData from './assets/rankingData.json';
+import {ToastContainer} from "react-toastify";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient()
 
 function AppContent() {
   const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenAtom);
   const [isRewardPopupOpen, setIsRewardPopupOpen] = useState(false);
-  const [rewardInfo, setRewardInfo] = useState({ title: "", subTitle: "" });
+  const [isRankingModalOpen, setIsRankingModalOpen] = useState(false);
+  const [rewardInfo, setRewardInfo] = useState({ title: '', subTitle: '' });
+  const [userRank, setUserRank] = useState(7); // 예시로 사용자 랭킹을 7로 설정
+
   useEffect(() => {
     const handleKeyPress = (event) => {
-      if (event.key === "q") {
+      if (event.key === 'q') {
         handleOpenRewardPopup("숨겨진 캐릭터 발견!!", "q 캐릭터 획득!!");
+      } else if (event.key === 'r') {
+        setIsRankingModalOpen(true);
       }
     };
 
-    window.addEventListener("keydown", handleKeyPress);
+    window.addEventListener('keydown', handleKeyPress);
 
     return () => {
-      window.removeEventListener("keydown", handleKeyPress);
+      window.removeEventListener('keydown', handleKeyPress);
     };
   }, []);
 
@@ -40,10 +47,7 @@ function AppContent() {
 
   const handleInvestmentDecision = (investmentInfo) => {
     setIsModalOpen(false);
-    handleOpenRewardPopup(
-      "투자 성공!",
-      `${investmentInfo.amount}원을 투자했습니다.`
-    );
+    handleOpenRewardPopup("투자 성공!", `${investmentInfo.amount}원을 투자했습니다.`);
   };
 
   return (
@@ -78,8 +82,15 @@ function AppContent() {
         subTitle={rewardInfo.subTitle}
       />
 
-      {/* CustomModal을 열기 위한 버튼 */}
+      <RankingModal
+        isOpen={isRankingModalOpen}
+        onClose={() => setIsRankingModalOpen(false)}
+        rankingData={rankingData}
+        userRank={userRank}
+      />
+
       <button onClick={() => setIsModalOpen(true)}>경제 위기 모험 시작</button>
+      <button onClick={() => setIsRankingModalOpen(true)}>랭킹 보기</button>
     </>
   );
 }

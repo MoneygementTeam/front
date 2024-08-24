@@ -1,0 +1,12 @@
+[
+    { "rank": 1, "nickname": "투자의신", "amount": 10000000 },
+    { "rank": 2, "nickname": "주식왕", "amount": 9500000 },
+    { "rank": 3, "nickname": "부동산매니아", "amount": 9000000 },
+    { "rank": 4, "nickname": "코인마스터", "amount": 8500000 },
+    { "rank": 5, "nickname": "경제전문가", "amount": 8000000 },
+    { "rank": 6, "nickname": "재테크고수", "amount": 7500000 },
+    { "rank": 7, "nickname": "월급쟁이", "amount": 7000000 },
+    { "rank": 8, "nickname": "알뜰살뜰", "amount": 6500000 },
+    { "rank": 9, "nickname": "티끌모아", "amount": 6000000 },
+    { "rank": 10, "nickname": "돈만보면", "amount": 5500000 }
+  ]

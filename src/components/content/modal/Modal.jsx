@@ -22,9 +22,10 @@ import financialTerms from "../../../assets/financialTerms.json";
 import financialCrisisScenarios from "../../../assets/financialCrisisScenarios.json";
 import { processApiResponse } from "./utils"; // 위에서 만든 함수를 import
 import axios from "axios";
+import { API_SERVER } from "../../../client/RequestQueryClient.js";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: API_SERVER ,
   withCredentials: false, // 필요한 경우 (쿠키를 포함해야 하는 경우)
 });
 

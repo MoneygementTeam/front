@@ -26,5 +26,19 @@
 - **의사 결정 능력 강화**: 모의 투자를 통해 합리적인 의사 결정을 배워요.
 - **학습 동기 부여**: 재미있는 게임 학습으로 지속적인 동기를 유지해요.
 
+## 서비스 레이아웃
+
+| <img src="https://github.com/user-attachments/assets/f419389e-5da7-49d3-bc49-98018fb6585e" width="250" alt="landing"> |       <img src="https://github.com/user-attachments/assets/001525f3-c579-411f-ad89-c23d2f1f437f" width="250" alt="quote">        | 
+|:---------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------------------------------:|
+|                                                         인터렉티브                                                         |                                                                퀴즈                                                                |
+| <img src="https://github.com/user-attachments/assets/830e986a-9f7d-48ee-8fa2-ce44199ef649" width="250" alt="landing"> |       <img src="https://github.com/user-attachments/assets/494b0be7-c2b1-46d8-9279-270dc8b4c82e" width="250" alt="quote">        |
+|                                                          걷기                                                           |                                                                케릭터 선택                                                                |
+
+
+
+
 ## 기술스택 
-<img src="https://skillicons.dev/icons?i=react,threejs,reactquery,materialui,canva,lodash,socketio,styledcomponents,vite,blender&perline=5" />
+<img src="https://skillicons.dev/icons?i=react,threejs,nodejs,npm,materialui,styledcomponents,vite,blender,vscode,nginx&perline=5" />
+
+
+

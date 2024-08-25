@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { RecoilRoot, useRecoilState } from "recoil";
+import {RecoilRoot, useRecoilState, useRecoilValue} from "recoil";
 import { IsModalOpenAtom } from "./store/ModalAtom";
 import "./App.css";
 import { ClientSocketControls } from "./components/utilComponents/ClientSocketControls";
@@ -13,6 +13,8 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import axios from "axios";
 import {API_SERVER} from "./client/RequestQueryClient.js";
 import {getSession} from "./store/SessionStore.js";
+import {AssetAtom} from "./store/PlayersAtom.js";
+import {AssetModal} from "./components/content/modal/AssetModal.jsx";
 
 const queryClient = new QueryClient()
 
@@ -22,7 +24,7 @@ function AppContent() {
   const [isRankingModalOpen, setIsRankingModalOpen] = useState(false);
   const [rewardInfo, setRewardInfo] = useState({ title: '', subTitle: '' });
   const [userRank, setUserRank] = useState(7); // 예시로 사용자 랭킹을 7로 설정
-  const [asset, setAsset] = useState(1000000);
+  const asset = useRecoilValue(AssetAtom);
 
   useEffect(() => {
 
@@ -30,8 +32,6 @@ function AppContent() {
     const handleKeyPress = (event) => {
       if (event.key === 'q') {
         handleOpenRewardPopup("숨겨진 캐릭터 발견!!", "q 캐릭터 획득!!");
-      } else if (event.key === 'r') {
-        setIsRankingModalOpen(true);
       }
     };
 
@@ -63,6 +63,8 @@ function AppContent() {
       <Content />
       <ClientSocketControls />
 
+        <AssetModal />
+
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -79,7 +81,7 @@ function AppContent() {
         title="경제 위기 모험!"
         page={1}
         investmentOptions={["원자재", "코인", "주식", "부동산"]}
-        Money={1000000}
+        Money={asset}
         onInvestmentDecision={handleInvestmentDecision}
       />
 

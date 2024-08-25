@@ -8,3 +8,7 @@ export const RewardPopupAtom = atom({
   key: 'RewardPopupAtom',
   default: { isOpen: false, title: '', subTitle: '' },
 });
+export const IsAssetModalAtom = atom({
+  key: "IsAssetModalAtom",
+  default: false,
+});

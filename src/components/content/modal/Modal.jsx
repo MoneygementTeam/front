@@ -13,7 +13,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useRecoilState } from "recoil";
 import { IsModalOpenAtom } from "../../../store/ModalAtom";
-import { PlayerCompletedQuestsAtom } from "../../../store/PlayersAtom";
+import {AssetAtom, PlayerCompletedQuestsAtom} from "../../../store/PlayersAtom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Grow } from "@mui/material";
 import InvestmentResultDisplay from "./InvestmentResultDisplay";
@@ -92,6 +92,7 @@ const CustomModal = ({
   const [investmentResult, setInvestmentResult] = useState(null);
   const [scenarioData, setScenarioData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [asset, setAsset] = useRecoilState(AssetAtom);
 
   useEffect(() => {
     const fetchScenarioData = async () => {
@@ -139,20 +140,10 @@ const CustomModal = ({
 
   const handleStoryNavigation = (direction) => {
     if (!scenarioData[currentScenario]) return;
-    
+
     const scenarioContent = scenarioData[currentScenario].content;
     const parsedScenario = parseScenario(scenarioContent);
 
-      const sessionId = JSON.parse(getSession()).id;
-      axios
-          .get(`${API_SERVER}/api/asset/${sessionId}`)
-          .then((response) => {
-              setMoney(response.data);
-          })
-          .catch((error) => {
-              toast(error);
-              return 1000000;
-          });
     if (direction === "next") {
       if (currentStoryPage < parsedScenario.length - 1) {
         setCurrentStoryPage(currentStoryPage + 1);
@@ -177,12 +168,6 @@ const CustomModal = ({
     setInvestmentPercentage(newValue);
   };
 
-  const clientMoneyResult = function(resultAmount) {
-      const session = JSON.parse(getSession()).id;
-      axios.put(`${API_SERVER}/api/asset/${session}`, resultAmount)
-          .then(res => res.json);
-  }
-
   const handleInvestmentDecision = () => {
     const investedAmount = Math.round((money * investmentPercentage) / 100);
     if (selectedInvestment === "부동산" && investedAmount < 100000) {
@@ -201,9 +186,8 @@ const CustomModal = ({
         returnRate
       });
 
-      clientMoneyResult(investedAmount);
+      setAsset( asset - investedAmount + resultAmount );
       setMoney(money - investedAmount + resultAmount);
-
 
       if (selectedInvestment === "부동산" && investedAmount >= 300000) {
         setPlayerCompletedQuests(prev => {

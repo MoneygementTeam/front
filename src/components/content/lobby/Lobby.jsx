@@ -14,6 +14,7 @@ import { API_SERVER } from "../../../client/RequestQueryClient.js";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { setSession } from "../../../store/SessionStore.js";
+import {IsAssetModalAtom, IsModalOpenAtom} from "../../../store/ModalAtom.js";
 
 export const Lobby = () => {
   const [currentStep, setCurrentStep] = useState(STEPS.NICK_NAME);
@@ -26,6 +27,7 @@ export const Lobby = () => {
   );
   const [isErrorToastOpen, setIsErrorToastOpen] =
     useRecoilState(ErrorToastAtom);
+  const [isModalOpen, setIsModalOpen] = useRecoilState(IsAssetModalAtom);
 
   if (!socket) return null;
   return (
@@ -107,29 +109,13 @@ export const Lobby = () => {
               onClick={async () => {
                 if (!tempNickName || !tempJobPosition) return;
 
-                const res = await axios
-                  .post(`${API_SERVER}/api/user/signin`, {
-                    userId: tempNickName,
-                    userPw: tempJobPosition,
-                  })
-                  .then((response) => response.data)
-                  .catch((error) => {
-                    toast(error);
-                    return;
-                  });
-                if (!res) {
-                  toast("Internal Server Error");
-                  return;
-                }
-                setSession({ id: res });
-
                 socket.emit("initialize", {
                   tempNickName,
                   tempJobPosition,
                   selectedCharacterGlbNameIndex,
                   myRoom: { object: [] },
                 });
-
+                setIsModalOpen(true);
                 setCharacterSelectFinished(true);
               }}
               onKeyUp={(e) => {

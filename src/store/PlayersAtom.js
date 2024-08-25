@@ -11,6 +11,11 @@ export const ErrorToastAtom = atom({
   default: false,
 });
 
+export const AssetAtom = atom({
+  key: "AssetAtom",
+  default: 1000000
+});
+
 // 내 socket 정보
 export const MeAtom = atom({
   key: "MeAtom",

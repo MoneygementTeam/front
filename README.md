@@ -1,8 +1,25 @@
-# React + Vite
+## Moneygement-FE
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> 과거의 경제사건을 모험하며 재미있게 금융 지식을 배우세요!
 
-Currently, two official plugins are available:
+## 목차
+- [소개](#소개)
+- [기능](#기능)
+- [기대 효과](#기대-효과)
+- [기술 스택](#기술-스택)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 기능
+### 1. 경제 공부를 통해 캐릭터 수집
+- 다양한 경제 관련 퀴즈와 학습 콘텐츠를 완료하면 새로운 캐릭터를 획득할 수 있습니다.
+- 획득한 캐릭터로만의 컬렉션을 만들고 성장시킬 수 있습니다.
+- 캐릭터들은 각기 다른 경제 시대와 상황이 반영되어 있습니다.
+
+### 2. 모의 투자로 자산 증대
+- 사용자는 역사적인 경제 위기 시대로 돌아가 다양한 투자 시나리오를 경험합니다.
+- 주식, 부동산, 금 등 다양한 자산에 투자하여 가상의 포트폴리오를 관리합니다.
+- 투자 결과를 통해 리스크 관리와 투자 전략에 대한 이해를 높입니다.
+
+## 기대 효과
+- **경제 문해력 향상**: 금융 이해력과 경제적 안목을 키우고, 미래의 재정적 결정을 위한 지혜를 얻을 수 있습니다.
+- **의사 결정 능력 강화**: 다양한 경제 상황에서의 모의 투자를 통해 합리적인 의사 결정 능력을 향상시킵니다.
+- **학습 동기 부여**: 게임화된 학습 환경을 통해 지속적인 학습 동기를 유지할 수 있습니다.

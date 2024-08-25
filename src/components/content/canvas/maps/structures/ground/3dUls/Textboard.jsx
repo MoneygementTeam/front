@@ -6,7 +6,7 @@ export const Textboard = forwardRef(({ text, isNpc }, ref) => {
   return (
     <Billboard ref={ref}>
       <Text
-        font={"/NotoSansKR-Regular.ttf"}
+        font={"/BMJUA_ttf.ttf"}
         fontSize={isNpc ? 0.4 : 0.25}
         color={isNpc ? 0xff71c2 : 0x000000}
       >

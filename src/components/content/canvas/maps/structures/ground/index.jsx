@@ -42,10 +42,10 @@ export const GroundElements = () => {
   }, [playerCompletedQuests, showHouseCharacter, players, me]);
 
   const handleHouseCharacterAppear = () => {
-    setRewardPopup({ 
-      isOpen: true, 
-      title: "새 캐릭터 획득!", 
-      subTitle: "House Character를 획득했습니다!" 
+    setRewardPopup({
+      isOpen: true,
+      title: "새 캐릭터 획득!",
+      subTitle: "House Character를 획득했습니다!"
     });
   };
 
@@ -55,11 +55,11 @@ export const GroundElements = () => {
 
       <Dinosaur />
       <Zombie />
-      <ShibaInu />
+
 
       <WoodChest />
       <Key />
-      <Steak />
+
 
       <Swing />
       <Clouds>
@@ -86,7 +86,7 @@ export const GroundElements = () => {
         />
       </Clouds>
       {showHouseCharacter && (
-        <HouseCharacter 
+        <HouseCharacter
           position={houseCharacterPosition}
           onAppear={handleHouseCharacterAppear}
         />

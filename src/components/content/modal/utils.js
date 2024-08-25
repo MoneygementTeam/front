@@ -1,6 +1,6 @@
 export const processApiResponse = (apiResponse) => {
   return apiResponse.reduce((acc, item) => {
-    acc[item.themeId] = {
+    acc[item.themeName] = {
       title: item.themeName,
       content: item.themeDesc,
       투자수익률: {

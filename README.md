@@ -25,3 +25,6 @@
 - **경제 문해력 향상**: 금융 이해력과 경제적 안목을 키워요.
 - **의사 결정 능력 강화**: 모의 투자를 통해 합리적인 의사 결정을 배워요.
 - **학습 동기 부여**: 재미있는 게임 학습으로 지속적인 동기를 유지해요.
+
+## 기술스택 
+<img src="https://skillicons.dev/icons?i=react,threejs,reactquery,materialui,canva,lodash,socketio,styledcomponents,vite,blender&perline=5" />

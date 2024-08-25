@@ -9,7 +9,7 @@ import { PlayersAtom, MeAtom } from '../../../../../../../../store/PlayersAtom';
 import { IsModalOpenAtom } from '../../../../../../../../store/ModalAtom';
 
 const name = "ground-npc-dinosaur";
-const text = "나는 무서운 육식 공룡이야..! 크아앙~   ";
+const text = "개천에서 용나고 싶니? 크앙";
 
 export const Dinosaur = () => {
   const ref = useRef(null);
@@ -78,7 +78,7 @@ export const Dinosaur = () => {
   return (
     <>
       <Textboard ref={chatRef} text={displayText} />
-      <Textboard ref={nameRef} text="디노" isNpc />
+      <Textboard ref={nameRef} text="퀴즈공룡" isNpc />
       <primitive
         ref={ref}
         visible

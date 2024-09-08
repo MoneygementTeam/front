@@ -2,13 +2,12 @@ import { useGLTF } from "@react-three/drei";
 import { useEffect, useMemo, useRef } from "react";
 import { Vector3 } from "three";
 import { uniq } from "lodash-es";
-import { useRecoilState } from "recoil";
-import { PlayerInventoryAtom } from "../../../../../../../store/PlayersAtom";
+import { usePlayersStore } from "../../../../../../../store/PlayersAtom"; // Zustand 상태 가져오기
 
 const name = "ground-steak";
 export const Steak = () => {
   const ref = useRef(null);
-  const [, setPlayerInventory] = useRecoilState(PlayerInventoryAtom);
+  const { setPlayerInventory } = usePlayersStore(); // Zustand 상태 사용
 
   const { scene } = useGLTF("/models/Steak.glb");
   const position = useMemo(() => new Vector3(-8, 0, -2), []);

@@ -2,22 +2,17 @@ import { useGLTF } from "@react-three/drei";
 import { useEffect, useMemo, useRef } from "react";
 import { Vector3 } from "three";
 import gsap from "gsap";
-import {
-  PlayerCompletedQuestsAtom,
-  PlayerInventoryAtom,
-} from "../../../../../../../store/PlayersAtom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { usePlayersStore } from "../../../../../../../store/PlayersAtom"; // Zustand 상태 가져오기
 import { uniq } from "lodash-es";
 
 const name = "ground-key";
 export const Key = () => {
   const ref = useRef(null);
-  const [playerInventory, setPlayerInventory] =
-    useRecoilState(PlayerInventoryAtom);
-  const playerCompletedQuests = useRecoilValue(PlayerCompletedQuestsAtom);
+  const { playerInventory, setPlayerInventory, playerCompletedQuests } = usePlayersStore(); // Zustand 상태 사용
 
   const { scene } = useGLTF("/models/Key.glb");
   const position = useMemo(() => new Vector3(22, 1, -18), []);
+
   useEffect(() => {
     scene.traverse((mesh) => {
       mesh.castShadow = true;
@@ -38,6 +33,7 @@ export const Key = () => {
   ) {
     return null;
   }
+
   return (
     <>
       <rectAreaLight

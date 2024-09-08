@@ -4,13 +4,10 @@ import { Vector3 } from "three";
 import { Textboard } from "../../3dUls/Textboard";
 import { useFrame } from "@react-three/fiber";
 import { useAnimatedText } from "../../../../../../../hooks/useAnimatedText";
-import {
-  PlayerCompletedQuestsAtom,
-  PlayerInventoryAtom,
-} from "../../../../../../../../store/PlayersAtom";
-import { useRecoilState } from "recoil";
+import { usePlayersStore } from "../../../../../../../../store/PlayersAtom"; // Zustand 상태 가져오기
 
 const name = "ground-npc-zombie";
+
 export const Zombie = () => {
   const ref = useRef(null);
   const nameRef = useRef(null);
@@ -18,12 +15,7 @@ export const Zombie = () => {
   const [text, setText] = useState("으으 오늘도 야근이라니...    ");
   const { displayText } = useAnimatedText(text);
 
-  const [playerInventory, setPlayerInventory] =
-    useRecoilState(PlayerInventoryAtom);
-
-  const [playerCompletedQuests, setPlayerCompletedQuests] = useRecoilState(
-    PlayerCompletedQuestsAtom
-  );
+  const { playerInventory, setPlayerInventory, playerCompletedQuests, setPlayerCompletedQuests } = usePlayersStore(); // Zustand 상태 사용
 
   const { scene, animations } = useGLTF("/models/Zombie.glb");
   const { actions } = useAnimations(animations, ref);
@@ -53,6 +45,7 @@ export const Zombie = () => {
       actions[currentAnimation]?.stop();
     };
   }, [actions, currentAnimation, position, scene]);
+
   useFrame(() => {
     if (!nameRef.current) return;
     nameRef.current.lookAt(10000, 10000, 10000);
@@ -73,6 +66,7 @@ export const Zombie = () => {
       ref.current.visible = false;
     }
   });
+
   return (
     <>
       <Textboard ref={chatRef} text={displayText} />
@@ -95,7 +89,6 @@ export const Zombie = () => {
           } else {
             alert("보물상자에서 퇴근권을 찾아주세요!");
           }
-          // 눌렀을 때 카메라 각도 바뀌면서 좀비랑 대화하는 구도
         }}
         visible
         name={name}

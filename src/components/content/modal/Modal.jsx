@@ -11,9 +11,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useRecoilState } from "recoil";
-import { IsModalOpenAtom } from "../../../store/ModalAtom";
-import {AssetAtom, PlayerCompletedQuestsAtom} from "../../../store/PlayersAtom";
+import { useModalStore } from "../../../store/ModalAtom";
+import {usePlayersStore} from "../../../store/PlayersAtom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Grow } from "@mui/material";
 import InvestmentResultDisplay from "./InvestmentResultDisplay";
@@ -75,10 +74,8 @@ const CustomModal = ({
   Money: initialMoney,
   onInvestmentDecision,
 }) => {
-  const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenAtom);
-  const [playerCompletedQuests, setPlayerCompletedQuests] = useRecoilState(
-    PlayerCompletedQuestsAtom
-  );
+  const {setIsModalOpen, isModalOpen, asset} = useModalStore();
+  const {setPlayerCompletedQuests} = usePlayersStore();
   const [currentPage, setCurrentPage] = useState(page);
   const [currentScenario, setCurrentScenario] = useState(null);
   const [currentStoryPage, setCurrentStoryPage] = useState(0);
@@ -92,7 +89,6 @@ const CustomModal = ({
   const [investmentResult, setInvestmentResult] = useState(null);
   const [scenarioData, setScenarioData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [asset, setAsset] = useRecoilState(AssetAtom);
 
   useEffect(() => {
     const fetchScenarioData = async () => {

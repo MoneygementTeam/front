@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {RecoilRoot, useRecoilState, useRecoilValue} from "recoil";
-import { IsModalOpenAtom } from "./store/ModalAtom";
+import { useModalStore } from "./store/ModalAtom"; // Zustand 상태 가져오기
+import { usePlayersStore } from "./store/PlayersAtom"; // Zustand 상태 가져오기
 import "./App.css";
 import { ClientSocketControls } from "./components/utilComponents/ClientSocketControls";
 import { Content } from "./components/content/Content";
@@ -8,26 +8,23 @@ import CustomModal from "./components/content/modal/Modal";
 import RewardPopup from "./components/content/modal/RewardPopup";
 import RankingModal from "./components/content/modal/RankingModal";
 import rankingData from './assets/rankingData.json';
-import {toast, ToastContainer} from "react-toastify";
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import { toast, ToastContainer } from "react-toastify";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
-import {API_SERVER} from "./client/RequestQueryClient.js";
-import {getSession} from "./store/SessionStore.js";
-import {AssetAtom} from "./store/PlayersAtom.js";
-import {AssetModal} from "./components/content/modal/AssetModal.jsx";
+import { API_SERVER } from "./client/RequestQueryClient.js";
+import { AssetModal } from "./components/content/modal/AssetModal.jsx";
 
 const queryClient = new QueryClient()
 
 function AppContent() {
-  const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenAtom);
+  const { isModalOpen, setIsModalOpen } = useModalStore();
+  const { asset } = usePlayersStore(); // Zustand에서 상태 사용
   const [isRewardPopupOpen, setIsRewardPopupOpen] = useState(false);
   const [isRankingModalOpen, setIsRankingModalOpen] = useState(false);
   const [rewardInfo, setRewardInfo] = useState({ title: '', subTitle: '' });
   const [userRank, setUserRank] = useState(7); // 예시로 사용자 랭킹을 7로 설정
-  const asset = useRecoilValue(AssetAtom);
 
   useEffect(() => {
-
 
     const handleKeyPress = (event) => {
       if (event.key === 'q') {
@@ -56,14 +53,12 @@ function AppContent() {
     handleOpenRewardPopup("투자 성공!", `${investmentInfo.amount}원을 투자했습니다.`);
   };
 
-
-
   return (
     <>
       <Content />
       <ClientSocketControls />
 
-        <AssetModal />
+      <AssetModal />
 
       <ToastContainer
         position="top-right"
@@ -108,9 +103,7 @@ function AppContent() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <RecoilRoot>
-        <AppContent />
-      </RecoilRoot>
+      <AppContent />
     </QueryClientProvider>
   );
 }

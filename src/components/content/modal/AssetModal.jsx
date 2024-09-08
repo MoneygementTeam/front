@@ -1,12 +1,9 @@
-import {useRecoilState} from "recoil";
-import {AssetAtom} from "../../../store/PlayersAtom.js";
+import {usePlayersStore} from "../../../store/PlayersAtom.js";
 import React, {useEffect} from "react";
 import {Box, Modal, Paper, Popover} from "@mui/material";
-import {IsAssetModalAtom, IsModalOpenAtom} from "../../../store/ModalAtom.js";
 
 export const AssetModal = () => {
-    const [asset, setAsset] = useRecoilState(AssetAtom);
-    const [isModalOpen, setIsModalOpen] = useRecoilState(IsAssetModalAtom);
+    const {asset, isModalOpen} = usePlayersStore();
 
 
     return (

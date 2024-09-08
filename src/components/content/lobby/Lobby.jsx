@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { STEPS } from "../../../data/constants";
-import { useRecoilState, useSetRecoilState } from "recoil";
 import {
-  CharacterSelectFinishedAtom,
-  ErrorToastAtom,
-  SelectedCharacterGlbNameIndexAtom,
+  usePlayersStore
 } from "../../../store/PlayersAtom";
 import { isValidText } from "../../../utils";
 import styled from "styled-components";
@@ -14,20 +11,14 @@ import { API_SERVER } from "../../../client/RequestQueryClient.js";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { setSession } from "../../../store/SessionStore.js";
-import {IsAssetModalAtom, IsModalOpenAtom} from "../../../store/ModalAtom.js";
+import { useModalStore } from "../../../store/ModalAtom.js";
 
 export const Lobby = () => {
   const [currentStep, setCurrentStep] = useState(STEPS.NICK_NAME);
   const [tempNickName, setTempNickname] = useState();
   const [tempJobPosition, setTempJobPosition] = useState();
-  const [selectedCharacterGlbNameIndex, setSelectedCharacterGlbNameIndex] =
-    useRecoilState(SelectedCharacterGlbNameIndexAtom);
-  const setCharacterSelectFinished = useSetRecoilState(
-    CharacterSelectFinishedAtom
-  );
-  const [isErrorToastOpen, setIsErrorToastOpen] =
-    useRecoilState(ErrorToastAtom);
-  const [isModalOpen, setIsModalOpen] = useRecoilState(IsAssetModalAtom);
+  const { selectedCharacterGlbNameIndex, setCharacterSelectFinished } = usePlayersStore();
+  const { setIsModalOpen, isModalOpen } = useModalStore();
 
   if (!socket) return null;
   return (

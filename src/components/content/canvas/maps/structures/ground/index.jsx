@@ -11,17 +11,14 @@ import { Key } from "./elements/Key";
 import { Steak } from "./elements/Steak";
 import { Cloud, Clouds } from "@react-three/drei";
 import { HouseCharacter } from './elements/npc/HouseCharacter';
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { PlayerCompletedQuestsAtom, PlayersAtom, MeAtom } from "../../../../../../store/PlayersAtom";
-import { RewardPopupAtom } from "../../../../../../store/ModalAtom";
+import { usePlayersStore } from "../../../../../../store/PlayersAtom"; // Zustand에서 상태 가져오기
+import { useModalStore } from "../../../../../../store/ModalAtom"; // Zustand에서 상태 가져오기
 import React, { useState, useEffect } from 'react';
 import { Vector3 } from 'three';
 
 export const GroundElements = () => {
-  const playerCompletedQuests = useRecoilValue(PlayerCompletedQuestsAtom);
-  const setRewardPopup = useSetRecoilState(RewardPopupAtom);
-  const players = useRecoilValue(PlayersAtom);
-  const me = useRecoilValue(MeAtom);
+  const { playerCompletedQuests, players, me } = usePlayersStore(); // Zustand에서 상태 사용
+  const { setRewardPopup } = useModalStore(); // Zustand에서 상태 사용
   const [showHouseCharacter, setShowHouseCharacter] = useState(false);
   const [houseCharacterPosition, setHouseCharacterPosition] = useState(new Vector3(0, 0, 0));
 
@@ -56,10 +53,8 @@ export const GroundElements = () => {
       <Dinosaur />
       <Zombie />
 
-
       <WoodChest />
       <Key />
-
 
       <Swing />
       <Clouds>

@@ -5,13 +5,10 @@ import gsap from "gsap";
 import { Textboard } from "../../3dUls/Textboard";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useAnimatedText } from "../../../../../../../hooks/useAnimatedText";
-import { useRecoilState } from "recoil";
-import {
-  PlayerCompletedQuestsAtom,
-  PlayerInventoryAtom,
-} from "../../../../../../../../store/PlayersAtom";
+import { usePlayersStore } from "../../../../../../../../store/PlayersAtom";
 
 const name = "ground-shiba-inu";
+
 export const ShibaInu = () => {
   const ref = useRef(null);
   const nameRef = useRef(null);
@@ -20,15 +17,12 @@ export const ShibaInu = () => {
   const { displayText } = useAnimatedText(text);
 
   const threeScene = useThree((three) => three.scene);
-  const [playerInventory, setPlayerInventory] =
-    useRecoilState(PlayerInventoryAtom);
-  const [playerCompletedQuests, setPlayerCompletedQuests] = useRecoilState(
-    PlayerCompletedQuestsAtom
-  );
+  const { playerInventory, setPlayerInventory, playerCompletedQuests, setPlayerCompletedQuests } = usePlayersStore();
 
   const { scene, animations } = useGLTF("/models/Shiba Inu.glb");
   const { actions } = useAnimations(animations, ref);
   const position = useMemo(() => new Vector3(-1, 0, 21), []);
+
   useEffect(() => {
     if (!ref.current) return;
     scene.traverse((mesh) => {
@@ -73,6 +67,7 @@ export const ShibaInu = () => {
       animation?.pause();
     };
   }, [actions, playerCompletedQuests, position, scene, threeScene]);
+
   useFrame(() => {
     if (!ref.current) return;
     if (!nameRef.current) return;
@@ -89,6 +84,7 @@ export const ShibaInu = () => {
     );
     chatRef.current.lookAt(10000, 10000, 10000);
   });
+
   return (
     <>
       <Textboard ref={chatRef} text={displayText} />

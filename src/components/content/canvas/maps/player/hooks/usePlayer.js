@@ -2,18 +2,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import { useFrame, useGraph } from "@react-three/fiber";
 import { SkeletonUtils } from "three-stdlib";
-import { useRecoilValue } from "recoil";
-import {
-  MeAtom,
-  PlayerGroundStructuresFloorPlaneCornersSelector,
-} from "../../../../../../store/PlayersAtom";
+import { usePlayersStore } from "../../../../../../store/PlayersAtom"; // Zustand 상태 가져오기
 
 export const usePlayer = ({ player, position, modelIndex }) => {
   const playerId = player?.id;
-  const me = useRecoilValue(MeAtom);
-  const playerGroundStructuresFloorPlaneCorners = useRecoilValue(
-    PlayerGroundStructuresFloorPlaneCornersSelector
-  );
+  const { me, playerGroundStructuresFloorPlaneCorners } = usePlayersStore(); // Zustand에서 상태 사용
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const memoizedPosition = useMemo(() => position, []);

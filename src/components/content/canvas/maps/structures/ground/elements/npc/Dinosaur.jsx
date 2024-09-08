@@ -4,12 +4,11 @@ import { Vector3 } from "three";
 import { Textboard } from "../../3dUls/Textboard";
 import { useAnimatedText } from "../../../../../../../hooks/useAnimatedText";
 import { useFrame, useThree } from "@react-three/fiber";
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { PlayersAtom, MeAtom } from '../../../../../../../../store/PlayersAtom';
-import { IsModalOpenAtom } from '../../../../../../../../store/ModalAtom';
+import { usePlayersStore } from '../../../../../../../../store/PlayersAtom'; // Zustand 상태 가져오기
+import { useModalStore } from '../../../../../../../../store/ModalAtom'; // Zustand 상태 가져오기
 
 const name = "ground-npc-dinosaur";
-const text = "개천에서 용나고 싶니? 크앙";
+const text = "개천에서 용나고 싶니? 크앙~~";
 
 export const Dinosaur = () => {
   const ref = useRef(null);
@@ -20,9 +19,8 @@ export const Dinosaur = () => {
   const position = useMemo(() => new Vector3(0, 0, -5), []);
   
   const [isPlayerNear, setIsPlayerNear] = useState(false);
-  const players = useRecoilValue(PlayersAtom);
-  const me = useRecoilValue(MeAtom);
-  const setIsModalOpen = useSetRecoilState(IsModalOpenAtom);
+  const { players, me } = usePlayersStore();
+  const { setIsModalOpen } = useModalStore();
   const { scene: threeScene } = useThree();
 
   useEffect(() => {

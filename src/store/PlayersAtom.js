@@ -1,85 +1,46 @@
-import { atom, selector } from "recoil";
+import { create } from 'zustand';
 
-// 모든 플레이어들
-export const PlayersAtom = atom({
-  key: "PlayersAtom",
-  default: [],
-});
+export const usePlayersStore = create((set, get) => ({
+  players: [],
+  setPlayers: (players) => set({ players }),
 
-export const ErrorToastAtom = atom({
-  key: "ErrorToastAtom",
-  default: false,
-});
+  errorToast: false,
+  setErrorToast: (value) => set({ errorToast: value }),
 
-export const AssetAtom = atom({
-  key: "AssetAtom",
-  default: 1000000
-});
+  asset: 1000000,
+  setAsset: (value) => set({ asset: value }),
 
-// 내 socket 정보
-export const MeAtom = atom({
-  key: "MeAtom",
-  default: undefined,
-});
+  me: undefined,
+  setMe: (me) => set({ me }),
 
-// 캐릭터 선택이 완료되었는지,
-export const CharacterSelectFinishedAtom = atom({
-  key: "CharacterSelectFinishedAtom",
-  default: false,
-});
+  characterSelectFinished: false,
+  setCharacterSelectFinished: (value) => set({ characterSelectFinished: value }),
 
-// 현재 선택된 캐릭터 종류
-export const SelectedCharacterGlbNameIndexAtom = atom({
-  key: "SelectedCharacterGlbNameIndexAtom",
-  default: 0,
-});
+  selectedCharacterGlbNameIndex: 0,
+  setSelectedCharacterGlbNameIndex: (index) => set({ selectedCharacterGlbNameIndex: index }),
 
-// 현재 완료된 퀘스트 목록
-export const PlayerCompletedQuestsAtom = atom({
-  key: "PlayerQuestsAtom",
-  default: [],
-});
+  playerCompletedQuests: [],
+  setPlayerCompletedQuests: (quests) => set({ playerCompletedQuests: quests }),
 
-// 현재 플레이어의 인벤토리
-export const PlayerInventoryAtom = atom({
-  key: "PlayerInventoryAtom",
-  default: [],
-});
+  playerInventory: [],
+  setPlayerInventory: (inventory) => set({ playerInventory: inventory }),
 
-// 운동장에 배치된 오브젝트들의 경계선 정보
-export const PlayGroundStructuresBoundingBoxAtom = atom({
-  key: "PlayGroundStructuresBoundingBoxAtom",
-  default: [],
-});
+  playGroundStructuresBoundingBox: [],
+  setPlayGroundStructuresBoundingBox: (boundingBoxes) => set({ playGroundStructuresBoundingBox: boundingBoxes }),
 
-// 운동장에 배치된 오브젝트들의 경계선 꼭짓점 정보
-export const PlayerGroundStructuresFloorPlaneCornersSelector = selector({
-  key: "PlayerGroundStructuresFloorPlaneCornersSelector",
-  get: ({ get }) => {
-    const pb = get(PlayGroundStructuresBoundingBoxAtom);
+  getPlayerGroundStructuresFloorPlaneCorners: () => {
+    const pb = get().playGroundStructuresBoundingBox;
     return pb.map((item) => {
       return {
         name: item.name,
         corners: [
-          {
-            x: item.box.max.x + item.position.x,
-            z: item.box.max.z + item.position.z,
-          },
-          {
-            x: item.box.max.x + item.position.x,
-            z: item.box.min.z + item.position.z,
-          },
-          {
-            x: item.box.min.x + item.position.x,
-            z: item.box.min.z + item.position.z,
-          },
-          {
-            x: item.box.min.x + item.position.x,
-            z: item.box.max.z + item.position.z,
-          },
+          { x: item.box.max.x + item.position.x, z: item.box.max.z + item.position.z },
+          { x: item.box.max.x + item.position.x, z: item.box.min.z + item.position.z },
+          { x: item.box.min.x + item.position.x, z: item.box.min.z + item.position.z },
+          { x: item.box.min.x + item.position.x, z: item.box.max.z + item.position.z },
         ],
         position: item.position,
       };
     });
   },
-});
+}));

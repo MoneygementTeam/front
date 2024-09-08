@@ -2,24 +2,17 @@ import { useGLTF } from "@react-three/drei";
 import { useEffect, useMemo, useRef } from "react";
 import { Vector3 } from "three";
 import gsap from "gsap";
-import {
-  PlayerCompletedQuestsAtom,
-  PlayerInventoryAtom,
-} from "../../../../../../../store/PlayersAtom";
-import { useRecoilState } from "recoil";
+import { usePlayersStore } from "../../../../../../../store/PlayersAtom"; // Zustand 상태 가져오기
 
 const name = "ground-wood-chest";
 export const WoodChest = () => {
   const ref = useRef(null);
 
-  const [playerInventory, setPlayerInventory] =
-    useRecoilState(PlayerInventoryAtom);
-  const [playerCompletedQuests, setPlayerCompletedQuests] = useRecoilState(
-    PlayerCompletedQuestsAtom
-  );
+  const { playerInventory, setPlayerInventory, playerCompletedQuests, setPlayerCompletedQuests } = usePlayersStore(); // Zustand 상태 사용
 
   const { scene } = useGLTF("/models/Wood Chest.glb");
   const position = useMemo(() => new Vector3(8, 0, 0), []);
+
   useEffect(() => {
     scene.traverse((mesh) => {
       mesh.castShadow = true;
@@ -37,7 +30,9 @@ export const WoodChest = () => {
         z: 1.1,
       });
   }, []);
+
   if (playerCompletedQuests.includes("treasure")) return null;
+
   return (
     <>
       <rectAreaLight
@@ -59,7 +54,6 @@ export const WoodChest = () => {
           } else {
             alert("열쇠가 필요합니다!");
           }
-          // 키를 안가졌을 때는 키 가져오라고 보여주고, 키 가졌을땐 보물 획득
         }}
         name={name}
         scale={1}

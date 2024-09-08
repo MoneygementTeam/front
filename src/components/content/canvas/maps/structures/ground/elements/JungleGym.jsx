@@ -2,17 +2,15 @@ import { useGLTF } from "@react-three/drei";
 import { useEffect, useMemo } from "react";
 import { Vector3 } from "three";
 import _ from "lodash-es";
-import { PlayGroundStructuresBoundingBoxAtom } from "../../../../../../../store/PlayersAtom";
-import { useRecoilState } from "recoil";
+import { usePlayersStore } from "../../../../../../../store/PlayersAtom"; // Zustand 상태 가져오기
 
 const name = "ground-jungleGym";
 const scale = 0.8;
 export const JungleGym = () => {
   const { scene } = useGLTF("/models/Jungle gym.glb");
-  const [, setPlayGroundStructuresBoundingBox] = useRecoilState(
-    PlayGroundStructuresBoundingBoxAtom
-  );
+  const { setPlayGroundStructuresBoundingBox } = usePlayersStore(); // Zustand 상태 사용
   const position = useMemo(() => new Vector3(-12, 0, 6), []);
+
   useEffect(() => {
     scene.traverse((mesh) => {
       mesh.castShadow = true;
@@ -42,6 +40,7 @@ export const JungleGym = () => {
       );
     }
   }, [position, scene, setPlayGroundStructuresBoundingBox]);
+
   return (
     <primitive
       visible

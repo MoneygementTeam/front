@@ -11,8 +11,8 @@ import { Key } from "./elements/Key";
 import { Steak } from "./elements/Steak";
 import { Cloud, Clouds } from "@react-three/drei";
 import { HouseCharacter } from './elements/npc/HouseCharacter';
-import { usePlayersStore } from "../../../../../../store/PlayersAtom"; // Zustand에서 상태 가져오기
-import { useModalStore } from "../../../../../../store/ModalAtom"; // Zustand에서 상태 가져오기
+import { usePlayersStore } from "../../../../../../store/PlayersStore"; // Zustand에서 상태 가져오기
+import { useModalStore } from "../../../../../../store/ModalStore"; // Zustand에서 상태 가져오기
 import React, { useState, useEffect } from 'react';
 import { Vector3 } from 'three';
 

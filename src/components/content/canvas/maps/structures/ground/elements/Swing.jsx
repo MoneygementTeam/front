@@ -2,7 +2,7 @@ import { useGLTF } from "@react-three/drei";
 import { useEffect, useMemo } from "react";
 import _ from "lodash-es";
 import { Vector3 } from "three";
-import { usePlayersStore } from "../../../../../../../store/PlayersAtom"; // Zustand 상태 가져오기
+import { usePlayersStore } from "../../../../../../../store/PlayersStore"; // Zustand 상태 가져오기
 
 const name = "ground-swing";
 const scale = 0.04;

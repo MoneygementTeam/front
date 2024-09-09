@@ -2,7 +2,7 @@ import { OrbitControls } from "@react-three/drei";
 import { useEffect, useRef } from "react";
 import { useThree } from "@react-three/fiber";
 import { Vector3 } from "three";
-import { usePlayersStore } from "../../../store/PlayersAtom";
+import { usePlayersStore } from "../../../store/PlayersStore";
 import { Player } from "../canvas/maps/player/Player";
 
 export const CharacterInit = () => {

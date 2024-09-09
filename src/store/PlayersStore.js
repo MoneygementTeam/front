@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 export const usePlayersStore = create((set, get) => ({
+
   players: [],
   setPlayers: (players) => set({ players }),
 
@@ -27,6 +28,9 @@ export const usePlayersStore = create((set, get) => ({
 
   playGroundStructuresBoundingBox: [],
   setPlayGroundStructuresBoundingBox: (boundingBoxes) => set({ playGroundStructuresBoundingBox: boundingBoxes }),
+
+  playerGroundStructuresFloorPlaneCorners: [],
+  setPlayerGroundStructuresFloorPlaneCorners: (corners) => set({ playerGroundStructuresFloorPlaneCorners: corners }),
 
   getPlayerGroundStructuresFloorPlaneCorners: () => {
     const pb = get().playGroundStructuresBoundingBox;

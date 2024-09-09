@@ -4,7 +4,7 @@ import { Vector3 } from "three";
 import { Textboard } from "../../3dUls/Textboard";
 import { useFrame } from "@react-three/fiber";
 import { useAnimatedText } from "../../../../../../../hooks/useAnimatedText";
-import { usePlayersStore } from "../../../../../../../../store/PlayersAtom"; // Zustand 상태 가져오기
+import { usePlayersStore } from "../../../../../../../../store/PlayersStore";
 
 const name = "ground-npc-zombie";
 
@@ -15,7 +15,7 @@ export const Zombie = () => {
   const [text, setText] = useState("으으 오늘도 야근이라니...    ");
   const { displayText } = useAnimatedText(text);
 
-  const { playerInventory, setPlayerInventory, playerCompletedQuests, setPlayerCompletedQuests } = usePlayersStore(); // Zustand 상태 사용
+  const { playerInventory, setPlayerInventory, playerCompletedQuests, setPlayerCompletedQuests } = usePlayersStore();
 
   const { scene, animations } = useGLTF("/models/Zombie.glb");
   const { actions } = useAnimations(animations, ref);

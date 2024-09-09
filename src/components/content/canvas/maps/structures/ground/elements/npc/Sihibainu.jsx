@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { Textboard } from "../../3dUls/Textboard";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useAnimatedText } from "../../../../../../../hooks/useAnimatedText";
-import { usePlayersStore } from "../../../../../../../../store/PlayersAtom";
+import { usePlayersStore } from "../../../../../../../../store/PlayersStore";
 
 const name = "ground-shiba-inu";
 

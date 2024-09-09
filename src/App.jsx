@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useModalStore } from "./store/ModalAtom"; // Zustand 상태 가져오기
-import { usePlayersStore } from "./store/PlayersAtom"; // Zustand 상태 가져오기
+import { useModalStore } from "./store/ModalStore"; // Zustand 상태 가져오기
+import { usePlayersStore } from "./store/PlayersStore"; // Zustand 상태 가져오기
 import "./App.css";
 import { ClientSocketControls } from "./components/utilComponents/ClientSocketControls";
 import { Content } from "./components/content/Content";

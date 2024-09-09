@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { socket } from "../../sockets/clientSocket";
-import { usePlayersStore } from "../../store/PlayersAtom";
+import { usePlayersStore } from "../../store/PlayersStore";
 import { getSession, setSession } from "../../store/SessionStore";
 
 export const ClientSocketControls = () => {

@@ -2,13 +2,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import { useFrame, useGraph } from "@react-three/fiber";
 import { SkeletonUtils } from "three-stdlib";
-import { usePlayersStore } from "../../../../../../store/PlayersAtom"; // Zustand 상태 가져오기
+import { usePlayersStore } from "../../../../../../store/PlayersStore";
 
 export const usePlayer = ({ player, position, modelIndex }) => {
   const playerId = player?.id;
-  const { me, playerGroundStructuresFloorPlaneCorners } = usePlayersStore(); // Zustand에서 상태 사용
+  const { me, playerGroundStructuresFloorPlaneCorners } = usePlayersStore();
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const memoizedPosition = useMemo(() => position, []);
 
   const nicknameRef = useRef(null);
@@ -29,7 +28,6 @@ export const usePlayer = ({ player, position, modelIndex }) => {
     })()
   );
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const clone = useMemo(() => SkeletonUtils.clone(scene), []);
   const objectMap = useGraph(clone);
   const nodes = objectMap.nodes;

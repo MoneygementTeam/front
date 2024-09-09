@@ -4,8 +4,8 @@ import { Vector3 } from "three";
 import { Textboard } from "../../3dUls/Textboard";
 import { useAnimatedText } from "../../../../../../../hooks/useAnimatedText";
 import { useFrame, useThree } from "@react-three/fiber";
-import { usePlayersStore } from '../../../../../../../../store/PlayersAtom'; // Zustand 상태 가져오기
-import { useModalStore } from '../../../../../../../../store/ModalAtom'; // Zustand 상태 가져오기
+import { usePlayersStore } from '../../../../../../../../store/PlayersStore'; // Zustand 상태 가져오기
+import { useModalStore } from '../../../../../../../../store/ModalStore'; // Zustand 상태 가져오기
 
 const name = "ground-npc-dinosaur";
 const text = "개천에서 용나고 싶니? 크앙~~";

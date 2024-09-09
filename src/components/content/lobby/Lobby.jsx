@@ -2,7 +2,7 @@ import { useState } from "react";
 import { STEPS } from "../../../data/constants";
 import {
   usePlayersStore
-} from "../../../store/PlayersAtom";
+} from "../../../store/PlayersStore";
 import { isValidText } from "../../../utils";
 import styled from "styled-components";
 import { MainCanvas } from "../canvas/MainCanvas";
@@ -11,7 +11,7 @@ import { API_SERVER } from "../../../client/RequestQueryClient.js";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { setSession } from "../../../store/SessionStore.js";
-import { useModalStore } from "../../../store/ModalAtom.js";
+import { useModalStore } from "../../../store/ModalStore.js";
 
 export const Lobby = () => {
   const [currentStep, setCurrentStep] = useState(STEPS.NICK_NAME);

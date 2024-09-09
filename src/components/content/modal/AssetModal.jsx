@@ -1,4 +1,4 @@
-import {usePlayersStore} from "../../../store/PlayersAtom.js";
+import {usePlayersStore} from "../../../store/PlayersStore.js";
 import React, {useEffect} from "react";
 import {Box, Modal, Paper, Popover} from "@mui/material";
 

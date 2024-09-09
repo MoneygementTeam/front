@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { GroundElements } from "./structures/ground";
-import { usePlayersStore } from "../../../../store/PlayersAtom"; // Zustand 상태 가져오기
+import { usePlayersStore } from "../../../../store/PlayersStore"; // Zustand 상태 가져오기
 import { CharacterInit } from "../../lobby/CharacterInit";
 import { useThree } from "@react-three/fiber";
 import * as THREE from "three";

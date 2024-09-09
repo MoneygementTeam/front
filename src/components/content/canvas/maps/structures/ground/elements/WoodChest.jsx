@@ -2,7 +2,7 @@ import { useGLTF } from "@react-three/drei";
 import { useEffect, useMemo, useRef } from "react";
 import { Vector3 } from "three";
 import gsap from "gsap";
-import { usePlayersStore } from "../../../../../../../store/PlayersAtom"; // Zustand 상태 가져오기
+import { usePlayersStore } from "../../../../../../../store/PlayersStore"; // Zustand 상태 가져오기
 
 const name = "ground-wood-chest";
 export const WoodChest = () => {

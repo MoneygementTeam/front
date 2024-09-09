@@ -2,7 +2,7 @@ import { useGLTF } from "@react-three/drei";
 import { useEffect, useMemo } from "react";
 import { Vector3 } from "three";
 import _ from "lodash-es";
-import { usePlayersStore } from "../../../../../../../store/PlayersAtom"; // Zustand 상태 가져오기
+import { usePlayersStore } from "../../../../../../../store/PlayersStore"; // Zustand 상태 가져오기
 
 const name = "ground-jungleGym";
 const scale = 0.8;

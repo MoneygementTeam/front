@@ -5,6 +5,7 @@ import { Textboard } from "../../3dUls/Textboard";
 import { useFrame } from "@react-three/fiber";
 import { useAnimatedText } from "../../../../../../../hooks/useAnimatedText";
 import { usePlayersStore } from "../../../../../../../../store/PlayersStore";
+import { useTranslation } from "react-i18next";
 
 const name = "ground-npc-zombie";
 
@@ -12,8 +13,10 @@ export const Zombie = () => {
   const ref = useRef(null);
   const nameRef = useRef(null);
   const chatRef = useRef(null);
-  const [text, setText] = useState("으으 오늘도 야근이라니...    ");
+  const {t} = useTranslation();
+  const text = t('monster.zombie_say');
   const { displayText } = useAnimatedText(text);
+  
 
   const { playerInventory, setPlayerInventory, playerCompletedQuests, setPlayerCompletedQuests } = usePlayersStore();
 
@@ -70,7 +73,7 @@ export const Zombie = () => {
   return (
     <>
       <Textboard ref={chatRef} text={displayText} />
-      <Textboard ref={nameRef} text="야근좀비" isNpc />
+      <Textboard ref={nameRef} text={t('monster.zombie')} isNpc />
       <primitive
         ref={ref}
         scale={1.2}

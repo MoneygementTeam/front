@@ -13,6 +13,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AssetModal } from "./components/content/modal/AssetModal.jsx";
 import { useTranslation } from 'react-i18next';
 import { initI18n } from './data/i18n.js';
+import ResponsiveAspectRatio from './responsiveAspectRatio';
 
 const queryClient = new QueryClient()
 initI18n();
@@ -131,9 +132,11 @@ function AppContent() {
 
 function App() {
   return (
+    <ResponsiveAspectRatio ratio={16/9}>
     <QueryClientProvider client={queryClient}>
       <AppContent />
     </QueryClientProvider>
+    </ResponsiveAspectRatio>
   );
 }
 

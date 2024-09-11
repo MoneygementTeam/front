@@ -6,11 +6,12 @@ export const resources = {
   en: {
     translation: {
       opening: {
-        whats_your_id: "what is your id ?",
+        greeting: "WELCOME TO MONEYGEMENT GAME!",
+        whats_your_id: "What is your id ?",
         button_go: "it's good",
-        whats_your_nickname: "what is your nickname ?",
+        whats_your_nickname: "What is your nickname ?",
         button_back: "go back",
-        choose_your_character: "choose your character",
+        choose_your_character: "Choose your character",
         button_another: "another character",
       },
       quizModal: {
@@ -35,6 +36,7 @@ export const resources = {
   ko: {
     translation: {
       opening: {
+        greeting: "머니지먼트 게임에 오신 걸 환영합니다!",
         whats_your_id: "아이디를 입력해주세요",
         button_go: "이대로 진행할래요",
         whats_your_nickname: "게임 내에서 사용할 내 이름이예요",

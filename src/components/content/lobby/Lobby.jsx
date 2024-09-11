@@ -12,23 +12,39 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { setSession } from "../../../store/SessionStore.js";
 import { useModalStore } from "../../../store/ModalStore.js";
+import {useTranslation} from "react-i18next";
 
 export const Lobby = () => {
   const [currentStep, setCurrentStep] = useState(STEPS.NICK_NAME);
   const [tempNickName, setTempNickname] = useState();
   const [tempJobPosition, setTempJobPosition] = useState();
-  const { selectedCharacterGlbNameIndex, setCharacterSelectFinished } = usePlayersStore();
+  const { setSelectedCharacterGlbNameIndex, selectedCharacterGlbNameIndex, setCharacterSelectFinished } = usePlayersStore();
   const { setIsModalOpen, isModalOpen } = useModalStore();
+  const {t} = useTranslation();
+
+  const handleCharacterSwitch = () => {
+    console.log('Current index:', selectedCharacterGlbNameIndex);
+    
+    let newIndex;
+    if (selectedCharacterGlbNameIndex === 2) {
+      newIndex = 0;
+    } else {
+      newIndex = selectedCharacterGlbNameIndex + 1;
+    }
+    
+    console.log('New index:', newIndex);
+    setSelectedCharacterGlbNameIndex(newIndex);
+  };
 
   if (!socket) return null;
   return (
     <LoginContainer>
       {currentStep === STEPS.NICK_NAME && (
         <>
-          <LoginTitle>아이디를 입력해주세요</LoginTitle>
+          <LoginTitle>{t('opening.whats_your_id')}</LoginTitle>
           <Input
             autoFocus
-            placeholder="아이디를 입력해주세요."
+            placeholder={t('opening.whats_your_id')}
             onChange={(e) => setTempNickname(e.target.value)}
             onKeyUp={(e) => {
               if (!isValidText(tempNickName)) return;
@@ -44,17 +60,17 @@ export const Lobby = () => {
               setCurrentStep(STEPS.JOB_POSITION);
             }}
           >
-            이대로 진행할래요
+            {t('opening.button_go')}
           </NextBtn>
         </>
       )}
       {currentStep === STEPS.JOB_POSITION && (
         <>
           <>
-            <LoginTitle>게임내에서 사용할 내 이름이예요</LoginTitle>
+            <LoginTitle>{t('opening.whats_your_nickname')}</LoginTitle>
             <Input
               autoFocus
-              placeholder="이름을 입력해주세요"
+              placeholder={t('opening.whats_your_nickname')}
               onChange={(e) => setTempJobPosition(e.target.value)}
               onKeyUp={(e) => {
                 if (!isValidText(tempJobPosition)) return;
@@ -70,7 +86,7 @@ export const Lobby = () => {
                 setCurrentStep((prev) => prev + 1);
               }}
             >
-              이대로 진행할래요
+              {t('opening.button_go')}
             </NextBtn>
             <PrevBtn
               onClick={() => {
@@ -78,14 +94,14 @@ export const Lobby = () => {
                 setTempNickname();
               }}
             >
-              이전으로 돌아갈래요
+              {t('opening.button_back')}
             </PrevBtn>
           </>
         </>
       )}
       {currentStep === STEPS.CHARACTER && (
         <>
-          <LoginTitle>게임내에서 사용할 내 아바타를 고를시간이에요</LoginTitle>
+          <LoginTitle>{t('opening.choose_your_character')}</LoginTitle>
           <CharacterCanvasContainer>
             <CharacterTunningWrapper>
               <CharacterCanvasWrapper>
@@ -122,25 +138,19 @@ export const Lobby = () => {
                 }
               }}
             >
-              이 모습으로 진행할래요
+              {t('opening.button_go')}
             </NextBtn>
             <PrevBtn
-              onClick={() => {
-                setSelectedCharacterGlbNameIndex((prev) => {
-                  if (prev === undefined) return 1;
-                  if (prev === 2) return 0;
-                  return prev + 1;
-                });
-              }}
+              onClick={handleCharacterSwitch}
             >
-              다른 케릭터도 볼래요
+              {t('opening.button_another')}
             </PrevBtn>
             <PrevBtn
               onClick={() => {
                 setCurrentStep((prev) => prev - 1);
               }}
             >
-              이전으로 돌아갈래요
+              {t('opening.button_back')}
             </PrevBtn>
           </CharacterCanvasContainer>
         </>

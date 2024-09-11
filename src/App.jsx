@@ -20,7 +20,7 @@ initI18n();
 
 function AppContent() {
   const { isModalOpen, setIsModalOpen } = useModalStore();
-  const { asset } = usePlayersStore(); // Zustand에서 상태 사용
+  const { asset } = usePlayersStore();
   const [isRewardPopupOpen, setIsRewardPopupOpen] = useState(false);
   const [isRankingModalOpen, setIsRankingModalOpen] = useState(false);
   const [rewardInfo, setRewardInfo] = useState({ title: '', subTitle: '' });

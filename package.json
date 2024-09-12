@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@aptos-labs/ts-sdk": "^1.27.1",
+    "@aptos-labs/wallet-adapter-react": "^3.6.2",
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.16.7",
@@ -17,6 +19,7 @@
     "@react-three/cannon": "^6.6.0",
     "@react-three/drei": "^9.111.1",
     "@react-three/fiber": "^8.17.5",
+    "@solana/web3.js": "^1.95.3",
     "@tanstack/react-query": "^5.52.1",
     "@tanstack/react-query-devtools": "^5.52.1",
     "@types/three": "^0.167.1",
@@ -28,6 +31,7 @@
     "i18next-browser-languagedetector": "^8.0.0",
     "loadsh": "^0.0.4",
     "lodash-es": "^4.17.21",
+    "petra-plugin-wallet-adapter": "^0.4.5",
     "react": "^18.3.1",
     "react-aspect-ratio": "^1.1.8",
     "react-dom": "^18.3.1",

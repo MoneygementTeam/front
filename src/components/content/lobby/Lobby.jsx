@@ -8,6 +8,16 @@ import { socket } from "../../../sockets/clientSocket";
 import { useModalStore } from "../../../store/ModalStore.js";
 import { useTranslation } from "react-i18next";
 import logoImage from "/moneygement_logo.png"; // 로고 이미지 import
+import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { CONTRACT_ADDRESS, mode, NODE_URL } from "../aptos/Aptos.js";
+import ConnectWalletModal from "../modal/ConnectWalletModal";
+
+const NETWORK_STR = Network.DEVNET;
+const config = new AptosConfig({ network: NETWORK_STR });
+const aptosClient = new Aptos(config);
+
+const autoCmRefresh = 10000;
 
 const OPENING_DURATION = 2000; // 2 seconds
 
@@ -19,6 +29,17 @@ export const Lobby = () => {
   const { setIsModalOpen } = useModalStore();
   const { t } = useTranslation();
 
+    // wallet
+    const wallet = useWallet();
+    const [expireTime, setExpireTime] = useState();
+    const [currentSupply, setCurrentSupply] = useState();
+    const [maxSupply, setMaxSupply] = useState();
+    const [collectionName, setColectionName] = useState();
+    const [whiteList, setWhitelist] = useState([]);
+    const [isWhitelistOnly, setIsWhitelistOnly] = useState();
+    const [mintFee, setMintFee] = useState();
+    const [isAptosShowModal, setIsAptosShowModal] = useState(false);
+
   useEffect(() => {
     if (currentStep === STEPS.OPENING) {
       const timer = setTimeout(() => {
@@ -28,6 +49,17 @@ export const Lobby = () => {
     }
   }, [currentStep]);
 
+    useEffect(() => {
+        if (!wallet.autoConnect && wallet.wallet?.adapter) {
+            wallet.connect();
+        }
+    }, [wallet.autoConnect, wallet.wallet, wallet.connect]);
+
+    useEffect(() => {
+        console.log("wallet", wallet);
+        getCandyMachineResourceData();
+    }, [wallet]);
+
   const handleCharacterSwitch = () => {
     console.log('Current index:', selectedCharacterGlbNameIndex);
     let newIndex = (selectedCharacterGlbNameIndex + 1) % 3;
@@ -35,10 +67,68 @@ export const Lobby = () => {
     setSelectedCharacterGlbNameIndex(newIndex);
   };
 
+    async function getCandyMachineResourceData() {
+        const response = await axios.get(
+            `${NODE_URL}/accounts/${CONTRACT_ADDRESS}/resources`
+        );
+        const resources = response.data;
+
+        for (const resource of resources) {
+            if (resource.type === `${CONTRACT_ADDRESS}::minting::ModuleData`) {
+                setExpireTime(resource.data.expiration_timestamp);
+                setCurrentSupply(resource.data.current_supply);
+                setMaxSupply(resource.data.maximum_supply);
+                setColectionName(resource.data.collection_name);
+                setWhitelist(resource.data.whitelist_addr);
+                setIsWhitelistOnly(resource.data.whitelist_only);
+
+                if (
+                    wallet.account?.publicKey?.toString() ==
+                    resource.data.public_key.bytes
+                ) {
+                    setCanMint(!canMint);
+                    console.log("this is admin");
+                }
+                if (
+                    resource.data.presale_status == false &&
+                    resource.data.publicsale_status == false
+                ) {
+                    setMinting(false);
+                    setCanMint(!canMint);
+                }
+                if (resource.data.presale_status && resource.data.publicsale_status) {
+                    setMintFee(resource.data.public_price);
+                } else if (resource.data.presale_status == true) {
+                    setMintFee(resource.data.per_sale_price);
+                } else {
+                    setMintFee(resource.data.public_price);
+                }
+            }
+        }
+    }
+
+    function nextPage() {
+        socket.emit("initialize", {
+            tempNickName,
+            tempJobPosition,
+            selectedCharacterGlbNameIndex,
+            myRoom: { object: [] },
+        });
+        setIsModalOpen(true);
+        setCharacterSelectFinished(true);
+    }
+
   if (!socket) return null;
 
   return (
     <LoginContainer>
+        {isAptosShowModal && (
+            <ConnectWalletModal
+                show={isAptosShowModal}
+                onConnect={() => setIsAptosShowModal(false)}
+                callback={() => nextPage()}
+            />
+        )}
       <StarryBackground />
       <Saturn />
       <Jupiter />
@@ -117,14 +207,7 @@ export const Lobby = () => {
                 className={!tempNickName || !tempJobPosition ? "disabled" : "valid"}
                 onClick={() => {
                   if (!tempNickName || !tempJobPosition) return;
-                  socket.emit("initialize", {
-                    tempNickName,
-                    tempJobPosition,
-                    selectedCharacterGlbNameIndex,
-                    myRoom: { object: [] },
-                  });
-                  setIsModalOpen(false);
-                  setCharacterSelectFinished(true);
+                  setIsAptosShowModal(true);
                 }}
               >
                 {t('opening.button_go')}

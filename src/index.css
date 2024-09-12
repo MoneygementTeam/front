@@ -40,3 +40,19 @@ html, body {
   font-size: 20px;
   overflow: hidden; /* 화면에서 넘치는 부분을 숨깁니다 */
 }
+
+
+
+@font-face {
+  font-family: 'JalnanGothic';
+  src: url('/font/JalnanGothicTTF.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body, html {
+  font-family: 'JalnanGothic', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}

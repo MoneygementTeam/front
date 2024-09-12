@@ -12,6 +12,7 @@ import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { CONTRACT_ADDRESS, mode, NODE_URL } from "../aptos/Aptos.js";
 import ConnectWalletModal from "../modal/ConnectWalletModal";
+import axios from 'axios';
 
 const NETWORK_STR = Network.DEVNET;
 const config = new AptosConfig({ network: NETWORK_STR });

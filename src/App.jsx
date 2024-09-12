@@ -7,12 +7,15 @@ import { Content } from "./components/content/Content";
 import CustomModal from "./components/content/modal/Modal";
 import RewardPopup from "./components/content/modal/RewardPopup";
 import RankingModal from "./components/content/modal/RankingModal";
+import MonsterInventoryModal from "./components/content/modal/MonsterInventoryModal";
 import rankingData from './assets/rankingData.json';
+import monsterInventoryData from './assets/monsterInventoryData.json';
 import { toast, ToastContainer } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AssetModal } from "./components/content/modal/AssetModal.jsx";
 import { useTranslation } from 'react-i18next';
 import { initI18n } from './data/i18n.js';
+import ImageButton from './components/content/button/ImageButton';
 import "./index.css";
 import { PetraWallet } from "petra-plugin-wallet-adapter";
 import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
@@ -25,6 +28,7 @@ function AppContent() {
   const { asset } = usePlayersStore();
   const [isRewardPopupOpen, setIsRewardPopupOpen] = useState(false);
   const [isRankingModalOpen, setIsRankingModalOpen] = useState(false);
+  const [isMonsterInventoryModalOpen, setIsMonsterInventoryModalOpen] = useState(false);
   const [rewardInfo, setRewardInfo] = useState({ title: '', subTitle: '' });
   const [userRank, setUserRank] = useState(7); // 예시로 사용자 랭킹을 7로 설정
   const [dimensions, setDimensions] = useState({
@@ -164,6 +168,16 @@ function AppContent() {
         userRank={userRank}
       />
 
+      <MonsterInventoryModal
+        isOpen={isMonsterInventoryModalOpen}
+        onClose={() => setIsMonsterInventoryModalOpen(false)}
+        monsterInventoryData={monsterInventoryData}
+      />
+      <ImageButton
+        src="/img/button/monster-inventory-button.png"
+        alt="Monster Inventory"
+        onClick={() => setIsMonsterInventoryModalOpen(true)}
+      />
       {/* <button onClick={() => setIsQuizModalOpen(true)}>경제 위기 모험 시작</button>
       <button onClick={() => setIsRankingModalOpen(true)}>랭킹 보기</button> */}
       </div>

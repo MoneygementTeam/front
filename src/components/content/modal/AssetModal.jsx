@@ -35,7 +35,7 @@ export const AssetModal = () => {
             )}
 
             {/*<Popover*/}
-            {/*    open={isModalOpen}*/}
+            {/*    open={isQuizModalOpen}*/}
 
             {/*    sx={{*/}
             {/*        display: "fixed",*/}

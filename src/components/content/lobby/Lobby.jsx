@@ -26,7 +26,7 @@ export const Lobby = () => {
   const [tempNickName, setTempNickname] = useState("");
   const [tempJobPosition, setTempJobPosition] = useState("");
   const { setSelectedCharacterGlbNameIndex, selectedCharacterGlbNameIndex, setCharacterSelectFinished } = usePlayersStore();
-  const { setIsModalOpen } = useModalStore();
+  const { setIsQuizModalOpen } = useModalStore();
   const { t } = useTranslation();
 
     // wallet
@@ -114,7 +114,7 @@ export const Lobby = () => {
             selectedCharacterGlbNameIndex,
             myRoom: { object: [] },
         });
-        setIsModalOpen(true);
+        setIsQuizModalOpen(false);
         setCharacterSelectFinished(true);
     }
 

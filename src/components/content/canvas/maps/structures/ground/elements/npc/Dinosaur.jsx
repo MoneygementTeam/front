@@ -20,7 +20,7 @@ export const Dinosaur = () => {
   
   const [isPlayerNear, setIsPlayerNear] = useState(false);
   const { players, me } = usePlayersStore();
-  const { setIsModalOpen } = useModalStore();
+  const { setIsQuizModalOpen } = useModalStore();
   const { scene: threeScene } = useThree();
 
   const { t } = useTranslation();
@@ -74,7 +74,7 @@ export const Dinosaur = () => {
   const handleClick = (event) => {
     if (isPlayerNear) {
       event.stopPropagation();
-      setIsModalOpen(true);
+      setIsQuizModalOpen(true);
     }
   };
 

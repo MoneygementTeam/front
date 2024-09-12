@@ -74,7 +74,7 @@ const CustomModal = ({
   Money: initialMoney,
   onInvestmentDecision,
 }) => {
-  const {setIsModalOpen, isModalOpen, asset} = useModalStore();
+  const {setIsQuizModalOpen, isQuizModalOpen, asset} = useModalStore();
   const {setPlayerCompletedQuests} = usePlayersStore();
   const [currentPage, setCurrentPage] = useState(page);
   const [currentScenario, setCurrentScenario] = useState(null);
@@ -108,7 +108,7 @@ const CustomModal = ({
 
 
   const closeModal = () => {
-    setIsModalOpen(false);
+    setIsQuizModalOpen(false);
     setCurrentPage(1);
     setCurrentScenario(null);
     setCurrentStoryPage(0);
@@ -117,7 +117,7 @@ const CustomModal = ({
     setInvestmentResult(null);
   };
 
-  //setIsModalOpen(true);
+  //setIsQuizModalOpen(true);
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
     if (newPage === 1) {
@@ -513,7 +513,7 @@ const CustomModal = ({
   return (
     <ThemeProvider theme={natureTheme}>
       <Modal
-        open={isModalOpen}
+        open={isQuizModalOpen}
         onClose={closeModal}
         closeAfterTransition
         sx={{
@@ -522,7 +522,7 @@ const CustomModal = ({
           justifyContent: "center",
         }}
       >
-        <Grow in={isModalOpen}>
+        <Grow in={isQuizModalOpen}>
           <Paper
             elevation={3}
             sx={{

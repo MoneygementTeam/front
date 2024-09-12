@@ -12,7 +12,7 @@ import NFTModal from "./modal/NFTModal"; // NFTModal 추가
 
 export const Content = () => {
   const { characterSelectFinished, me, asset } = usePlayersStore(); 
-  const { isModalOpen, setIsModalOpen } = useModalStore();
+  const { isQuizModalOpen, setIsQuizModalOpen } = useModalStore();
   const [isRewardPopupOpen, setIsRewardPopupOpen] = useState(false);
   const [isNFTModalOpen, setIsNFTModalOpen] = useState(false); // NFTModal 상태
   const [nftItems, setNftItems] = useState([]); // NFT 리스트 상태
@@ -59,7 +59,7 @@ export const Content = () => {
   };
 
   const handleInvestmentDecision = (investmentInfo) => {
-    setIsModalOpen(false);
+    setIsQuizModalOpen(false);
     setIsRewardPopupOpen(true);
   };
 

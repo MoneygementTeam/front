@@ -109,7 +109,7 @@ function AppContent() {
   };
 
   const handleInvestmentDecision = (investmentInfo) => {
-    setIsModalOpen(false);
+    setIsQuizModalOpen(false);
     handleOpenRewardPopup("투자 성공!", `${investmentInfo.amount}원을 투자했습니다.`);
   };
 
@@ -127,7 +127,7 @@ function AppContent() {
       <Content />
       <ClientSocketControls />
 
-      <AssetModal />
+      {/* <AssetModal /> */}
 
       <ToastContainer
         position="top-right"
@@ -142,6 +142,7 @@ function AppContent() {
       />
 
       <CustomModal
+        isOpen={isQuizModalOpen}
         title={t('quizModal.title')}
         page={1}
         investmentOptions={[t('quizModal.invest_option1'), t('quizModal.invest_option2'), t('quizModal.invest_option3'), t('quizModal.invest_option4')]}
@@ -163,7 +164,7 @@ function AppContent() {
         userRank={userRank}
       />
 
-      {/* <button onClick={() => setIsModalOpen(true)}>경제 위기 모험 시작</button>
+      {/* <button onClick={() => setIsQuizModalOpen(true)}>경제 위기 모험 시작</button>
       <button onClick={() => setIsRankingModalOpen(true)}>랭킹 보기</button> */}
       </div>
     </>

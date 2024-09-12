@@ -14,6 +14,8 @@ import { AssetModal } from "./components/content/modal/AssetModal.jsx";
 import { useTranslation } from 'react-i18next';
 import { initI18n } from './data/i18n.js';
 import "./index.css";
+import { PetraWallet } from "petra-plugin-wallet-adapter";
+import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
 
 const queryClient = new QueryClient()
 initI18n();
@@ -169,10 +171,19 @@ function AppContent() {
 }
 
 function App() {
-  return (
+  const wallets = [new PetraWallet()];
 
+  return (
     <QueryClientProvider client={queryClient}>
-      <AppContent />
+      <AptosWalletAdapterProvider
+          plugins={wallets}
+          autoConnect={false}
+          onError={(error) => {
+            console.log("AptosWalletAdapterProvider Error :: ", error);
+          }}
+      >
+        <AppContent />
+      </AptosWalletAdapterProvider>
     </QueryClientProvider>
   );
 }

@@ -12,7 +12,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useModalStore } from "../../../store/ModalStore.js";
-import {usePlayersStore} from "../../../store/PlayersStore.js";
+import { usePlayersStore } from "../../../store/PlayersStore.js";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Grow } from "@mui/material";
 import InvestmentResultDisplay from "./InvestmentResultDisplay";
@@ -25,17 +25,19 @@ import axios from "axios";
 
 import { API_SERVER } from "../../../client/RequestQueryClient.js";
 
-import {getSession} from "../../../store/SessionStore.js";
+import { getSession } from "../../../store/SessionStore.js";
 
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { CONTRACT_ADDRESS, mode, NODE_URL } from "../aptos/Aptos.js";
+import { Network } from "@aptos-labs/ts-sdk";
+import { createCard } from "../aptos/aptosClient.js";
 
 const api = axios.create({
-  baseURL: API_SERVER ,
+  baseURL: API_SERVER,
   withCredentials: false, // 필요한 경우 (쿠키를 포함해야 하는 경우)
 });
-
-
 
 // 자연 테마 정의
 const natureTheme = createTheme({
@@ -74,8 +76,8 @@ const CustomModal = ({
   Money: initialMoney,
   onInvestmentDecision,
 }) => {
-  const {setIsQuizModalOpen, isQuizModalOpen, asset} = useModalStore();
-  const {setPlayerCompletedQuests} = usePlayersStore();
+  const { setIsQuizModalOpen, isQuizModalOpen, asset } = useModalStore();
+  const { setPlayerCompletedQuests } = usePlayersStore();
   const [currentPage, setCurrentPage] = useState(page);
   const [currentScenario, setCurrentScenario] = useState(null);
   const [currentStoryPage, setCurrentStoryPage] = useState(0);
@@ -93,19 +95,18 @@ const CustomModal = ({
   useEffect(() => {
     const fetchScenarioData = async () => {
       try {
-        const response = await api.get('/api/theme/');
+        const response = await api.get("/api/theme/");
         const processedData = processApiResponse(response.data);
         setScenarioData(processedData);
         setIsLoading(false);
       } catch (error) {
-        console.error('Error fetching scenario data:', error);
+        console.error("Error fetching scenario data:", error);
         setIsLoading(false);
       }
     };
 
     fetchScenarioData();
   }, []);
-
 
   const closeModal = () => {
     setIsQuizModalOpen(false);
@@ -144,7 +145,7 @@ const CustomModal = ({
       if (currentStoryPage < parsedScenario.length - 1) {
         setCurrentStoryPage(currentStoryPage + 1);
       } else {
-          handlePageChange(3);
+        handlePageChange(3);
       }
     } else if (direction === "prev") {
       if (currentStoryPage > 0) {
@@ -164,14 +165,47 @@ const CustomModal = ({
     setInvestmentPercentage(newValue);
   };
 
+  const nft_minting = async () => {
+    const account_address = wallet.account?.address?.toString();
+
+    console.log("account_address ::" + account_address);
+    if (account_address === undefined) {
+      await timeout(3000);
+      alert("로그인 후 이용해주세요.");
+      console.log("account_address undefined");
+    }
+
+    const quantity = parseInt(1);
+    try {
+      const txHash = await wallet.signAndSubmitTransaction({
+        sender: account_address,
+        data: {
+          function: `${CONTRACT_ADDRESS}::minting::mint_nft`,
+          typeArguments: [],
+          functionArguments: [quantity],
+        },
+      });
+      await createCard({
+        userId: "3703410020",
+        nftId: txHash.hash,
+        cardUrl: txHash.output.changes[11].data.data.token_uri,
+      });
+
+      alert("nft 을 획득하였습니다");
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   const handleInvestmentDecision = () => {
     const investedAmount = Math.round((money * investmentPercentage) / 100);
     if (selectedInvestment === "부동산" && investedAmount < 100000) {
       setAlertMessage("최소 금액이 100000원 입니다!");
       setIsAlertOpen(true);
     } else {
-      const returnRateString = scenarioData[currentScenario].투자수익률[selectedInvestment];
-      const returnRate = parseFloat(returnRateString.replace('%', '')) / 100;
+      const returnRateString =
+        scenarioData[currentScenario].투자수익률[selectedInvestment];
+      const returnRate = parseFloat(returnRateString.replace("%", "")) / 100;
       const resultAmount = Math.round(investedAmount * (1 + returnRate));
       const profit = resultAmount - investedAmount;
 
@@ -179,19 +213,17 @@ const CustomModal = ({
         investedAmount,
         resultAmount,
         profit,
-        returnRate
+        returnRate,
       });
 
-      setAsset( asset - investedAmount + resultAmount );
+      setAsset(asset - investedAmount + resultAmount);
       setMoney(money - investedAmount + resultAmount);
 
       if (selectedInvestment === "부동산" && investedAmount >= 300000) {
-        setPlayerCompletedQuests(prev => {
-          if (!prev.includes("houseInvestment")) {
-            return [...prev, "houseInvestment"];
-          }
-          return prev;
-        });
+        if (!playerCompletedQuests.includes("houseInvestment")) {
+          // setPlayerCompletedQuests(prev => [...prev, "houseInvestment"]);
+          nft_minting();
+        }
       }
 
       handlePageChange(5);
@@ -479,36 +511,42 @@ const CustomModal = ({
             </Grid>
           </>
         );
-        case 5:
-          return (
-            <>
-              <Box flexGrow={1} display="flex" flexDirection="column" justifyContent="center" mb={2}>
-                <InvestmentResultDisplay
-                  investmentResult={investmentResult}
-                  investmentPercentage={investmentPercentage}
-                />
-              </Box>
-              <Button
-                variant="contained"
-                onClick={closeModal}
-                sx={{
-                  fontSize: "18px",
-                  padding: "10px 20px",
-                  backgroundColor: natureTheme.palette.primary.main,
-                  color: natureTheme.palette.background.paper,
-                  "&:hover": {
-                    backgroundColor: natureTheme.palette.primary.dark,
-                  },
-                }}
-              >
-                닫기
-              </Button>
-            </>
-          );
-        default:
-          return null;
-      }
-    };
+      case 5:
+        return (
+          <>
+            <Box
+              flexGrow={1}
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+              mb={2}
+            >
+              <InvestmentResultDisplay
+                investmentResult={investmentResult}
+                investmentPercentage={investmentPercentage}
+              />
+            </Box>
+            <Button
+              variant="contained"
+              onClick={closeModal}
+              sx={{
+                fontSize: "18px",
+                padding: "10px 20px",
+                backgroundColor: natureTheme.palette.primary.main,
+                color: natureTheme.palette.background.paper,
+                "&:hover": {
+                  backgroundColor: natureTheme.palette.primary.dark,
+                },
+              }}
+            >
+              닫기
+            </Button>
+          </>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <ThemeProvider theme={natureTheme}>

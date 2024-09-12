@@ -77,7 +77,7 @@ const CustomModal = ({
   onInvestmentDecision,
 }) => {
   const { setIsQuizModalOpen, isQuizModalOpen, asset } = useModalStore();
-  const { setPlayerCompletedQuests } = usePlayersStore();
+  const {playerCompletedQuests, setPlayerCompletedQuests} = usePlayersStore();
   const [currentPage, setCurrentPage] = useState(page);
   const [currentScenario, setCurrentScenario] = useState(null);
   const [currentStoryPage, setCurrentStoryPage] = useState(0);
@@ -91,6 +91,7 @@ const CustomModal = ({
   const [investmentResult, setInvestmentResult] = useState(null);
   const [scenarioData, setScenarioData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const wallet = useWallet();
 
   useEffect(() => {
     const fetchScenarioData = async () => {
@@ -186,7 +187,7 @@ const CustomModal = ({
         },
       });
       await createCard({
-        userId: "3703410020",
+        userId: JSON.parse(window.localStorage.getItem('userInfo')).userId,
         nftId: txHash.hash,
         cardUrl: txHash.output.changes[11].data.data.token_uri,
       });
@@ -216,14 +217,12 @@ const CustomModal = ({
         returnRate,
       });
 
-      setAsset(asset - investedAmount + resultAmount);
       setMoney(money - investedAmount + resultAmount);
 
       if (selectedInvestment === "부동산" && investedAmount >= 300000) {
-        if (!playerCompletedQuests.includes("houseInvestment")) {
-          // setPlayerCompletedQuests(prev => [...prev, "houseInvestment"]);
-          nft_minting();
-        }
+          if (!playerCompletedQuests.includes("houseInvestment")) {
+              nft_minting();
+          }
       }
 
       handlePageChange(5);

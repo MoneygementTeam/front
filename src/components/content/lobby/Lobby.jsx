@@ -13,6 +13,8 @@ import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { CONTRACT_ADDRESS, mode, NODE_URL } from "../aptos/Aptos.js";
 import ConnectWalletModal from "../modal/ConnectWalletModal";
 import axios from 'axios';
+import {toast} from "react-toastify";
+import {API_SERVER} from "../../../client/RequestQueryClient.js";
 
 const NETWORK_STR = Network.DEVNET;
 const config = new AptosConfig({ network: NETWORK_STR });
@@ -109,15 +111,37 @@ export const Lobby = () => {
     }
 
     function nextPage() {
-        socket.emit("initialize", {
-            tempNickName,
-            tempJobPosition,
-            selectedCharacterGlbNameIndex,
-            myRoom: { object: [] },
-        });
-        setIsQuizModalOpen(false);
-        setCharacterSelectFinished(true);
+        if(window.localStorage.getItem('userInfo')) {
+            socket.emit("initialize", {
+                tempNickName,
+                tempJobPosition,
+                selectedCharacterGlbNameIndex,
+                myRoom: { object: [] },
+            });
+            setIsQuizModalOpen(false);
+            setCharacterSelectFinished(true);
+        } else {
+            window.open(`${API_SERVER}/login/oauth2`, '', '_blank');
+        }
     }
+
+    window.addEventListener("message", function(event) {
+        if (event.origin !== `${API_SERVER}`) return;
+        try {
+            window.localStorage.setItem("userInfo", event.data.replace(/&quot;/g, '"'));
+
+            socket.emit("initialize", {
+                tempNickName,
+                tempJobPosition,
+                selectedCharacterGlbNameIndex,
+                myRoom: { object: [] },
+            });
+            setIsQuizModalOpen(false);
+            setCharacterSelectFinished(true);
+        } catch (error) {
+            console.error("Invalid JSON data received:", error);
+        }
+    });
 
   if (!socket) return null;
 

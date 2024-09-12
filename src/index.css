@@ -37,6 +37,6 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 24px;
+  font-size: 20px;
   overflow: hidden; /* 화면에서 넘치는 부분을 숨깁니다 */
 }

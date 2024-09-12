@@ -111,7 +111,7 @@ export const Content = () => {
               </Button>
             </div>
 
-            {/* 보상보기 버튼 */}
+            {/* 보상보기 버튼 (NFT Wallet 버튼) */}
             <div
               style={{
                 position: "absolute",
@@ -129,18 +129,9 @@ export const Content = () => {
               </Button>
             </div>
 
-            <div
-              style={{
-                position: "absolute",
-                bottom: "120px", 
-                left: "10px",
-                pointerEvents: "auto",
-                transform: `scale(${dimensions.width / 1920})`, // 화면 크기에 맞게 스케일 조정
-                transformOrigin: "bottom left",
-              }}
-            >
+            {/* AssetModal */}
+
               <AssetModal />
-            </div>
 
             {/* NFT Modal - 보상 보기 버튼 클릭 시 열림 */}
             <NFTModal

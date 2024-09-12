@@ -126,6 +126,7 @@ export const Lobby = () => {
     }
 
     window.addEventListener("message", function(event) {
+        console.log(`${API_SERVER}` , event.origin) ;
         if (event.origin !== `${API_SERVER}`) return;
         try {
             window.localStorage.setItem("userInfo", event.data.replace(/&quot;/g, '"'));

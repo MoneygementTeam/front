@@ -1,14 +1,18 @@
 import React, {useEffect} from "react";
 import {Box, Modal, Paper, Popover} from "@mui/material";
 import { useModalStore } from "../../../store/ModalStore.js";
+import { useTranslation } from "react-i18next";
+import { usePlayersStore } from "../../../store/PlayersStore.js";
 
 export const AssetModal = () => {
-    const {asset, isAssetModalOpen} = useModalStore();
+    const {asset } = useModalStore();
+    const {characterSelectFinished} = usePlayersStore();
+    const {t} = useTranslation();
 
 
     return (
         <>
-            {isAssetModalOpen && (
+            {characterSelectFinished && (
                 <Box
                     sx={{
                         position: 'absolute',
@@ -26,7 +30,7 @@ export const AssetModal = () => {
                         borderRadius: 2,
                     }}
                 >
-                    자산 : <span style={{ color: 'red' }}> {asset.toLocaleString()} </span>
+                    {t('ui.asset')} : <span style={{ color: 'red' }}> {asset.toLocaleString()} </span>
                 </Box>
             )}
 

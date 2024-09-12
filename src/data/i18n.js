@@ -30,6 +30,10 @@ export const resources = {
       reward: {
         new_monster_reveal:"New Monster Revealed",
         got_item: "you just got {{item}}!!"
+      },
+      ui: {
+        asset:"Asset",
+        walletButton:"NFT Wallet"
       }
     }
   },
@@ -60,6 +64,10 @@ export const resources = {
       reward: {
         new_monster_reveal:"새로운 몬스터 발견",
         got_item: "{{item}}을(를) 얻었습니다!!"
+      },
+      ui: {
+        asset:"자산",
+        walletButton:"NFT지갑"
       }
     }
   }

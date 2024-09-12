@@ -2,6 +2,7 @@ import React from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { RootMap } from "./maps/RootMap";
+import { AssetModal } from "../modal/AssetModal";
 
 export const MainCanvas = () => {
   const aspectRatio = window.outerWidth / window.outerHeight;

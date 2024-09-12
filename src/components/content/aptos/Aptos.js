@@ -1,5 +1,5 @@
 export const CONTRACT_ADDRESS =
-    "58986c8f6dc06ee743ab57c516ed89489383f2cbf54e2dac62755b6dbfb7dda9";
+    "729bc1f0ccadc8d641c62097a053f8a9c88268239a18d0d58d45bf3b15205e95";
 
 export const mode = "dev";
 export let NODE_URL;

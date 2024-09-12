@@ -1,17 +1,17 @@
-import {usePlayersStore} from "../../../store/PlayersStore.js";
 import React, {useEffect} from "react";
 import {Box, Modal, Paper, Popover} from "@mui/material";
+import { useModalStore } from "../../../store/ModalStore.js";
 
 export const AssetModal = () => {
-    const {asset, isModalOpen} = usePlayersStore();
+    const {asset, isAssetModalOpen} = useModalStore();
 
 
     return (
         <>
-            {isModalOpen && (
+            {isAssetModalOpen && (
                 <Box
                     sx={{
-                        position: 'fixed',
+                        position: 'absolute',
                         left: '3%',
                         top: '3%',
                         zIndex: 1300,

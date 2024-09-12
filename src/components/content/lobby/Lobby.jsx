@@ -123,7 +123,7 @@ export const Lobby = () => {
                     selectedCharacterGlbNameIndex,
                     myRoom: { object: [] },
                   });
-                  setIsModalOpen(true);
+                  setIsModalOpen(false);
                   setCharacterSelectFinished(true);
                 }}
               >
@@ -338,8 +338,8 @@ const CharacterCanvasContainer = styled.div`
 `;
 
 const CharacterTunningWrapper = styled.div`
-  width: 100%;
-  height: 80%;
+  width: 40%;
+  height: 100%;
   display: flex;
   flex-direction: row;
   justify-content: center;

@@ -11,3 +11,33 @@ body {
   margin: 0;
   padding: 0;
 }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black; /* 전체 배경 */
+}
+
+#root {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* 화면에서 넘치는 부분을 숨깁니다 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-container {
+  background-color: #333; /* 게임 화면 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  overflow: hidden; /* 화면에서 넘치는 부분을 숨깁니다 */
+}

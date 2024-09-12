@@ -5,7 +5,7 @@ import { Lobby } from "./lobby/Lobby";
 import { useEffect } from "react";
 
 export const Content = () => {
-  const { characterSelectFinished, setCharacterSelectFinished, me, setMe } = usePlayersStore(); // Zustand에서 상태 사용
+  const { characterSelectFinished, me } = usePlayersStore(); // Zustand에서 상태 사용
 
   if (characterSelectFinished && me) {
     return (

@@ -21,7 +21,7 @@ const queryClient = new QueryClient()
 initI18n();
 
 function AppContent() {
-  const { isModalOpen, setIsModalOpen } = useModalStore();
+  const { isQuizModalOpen, setIsQuizModalOpen } = useModalStore();
   const { asset } = usePlayersStore();
   const [isRewardPopupOpen, setIsRewardPopupOpen] = useState(false);
   const [isRankingModalOpen, setIsRankingModalOpen] = useState(false);

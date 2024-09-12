@@ -120,13 +120,7 @@ export const Content = () => {
                 pointerEvents: "auto", // 클릭 가능한 영역
               }}
             >
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleOpenNFTModal} // 보상 보기 시 NFT Modal 열기
-              >
-                {t('ui.walletButton')}
-              </Button>
+
             </div>
 
             {/* AssetModal */}

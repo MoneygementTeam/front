@@ -26,6 +26,7 @@ initI18n();
 function AppContent() {
   const { isQuizModalOpen, setIsQuizModalOpen } = useModalStore();
   const { asset } = usePlayersStore();
+//  const [monsterInventoryData, setMonsterInventoryData] = useState([]);
   const [isRewardPopupOpen, setIsRewardPopupOpen] = useState(false);
   const [isRankingModalOpen, setIsRankingModalOpen] = useState(false);
   const [isMonsterInventoryModalOpen, setIsMonsterInventoryModalOpen] = useState(false);
@@ -98,6 +99,22 @@ function AppContent() {
       window.removeEventListener('keydown', handleKeyPress);
     };
   }, [i18n]);
+
+//  const userId = 'user1';
+//  useEffect(() => {
+//    const fetchMonsterInventoryData = async () => {
+//      try {
+//        setIsLoading(true);
+//        const data = await getMonsterInventoryDataByUserId(userId);
+//        setMonsterInventoryData(data);
+//      } catch (error) {
+//        setError('Error fetching monster inventory data');
+//      } finally {
+//        setIsLoading(false);
+//      }
+//    };
+//    fetchMonsterInventoryData();
+//  }, [userId]);
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
